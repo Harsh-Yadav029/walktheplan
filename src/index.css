@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  --color-alabaster: #F5F2EB;
+  --color-travertine: #E8E3D9;
+  --color-obsidian: #191A18;
+  --color-stone-muted: #77746D;
+  --color-terracotta: #B97856;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: #F5F2EB;
+    color: #191A18;
+  }
+
+  section[id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  h1, h2, h3, h4, .font-editorial {
+    font-family: var(--font-serif);
+    text-wrap: balance;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.wtp-custom-cursor,
+  html.wtp-custom-cursor body,
+  html.wtp-custom-cursor a,
+  html.wtp-custom-cursor button,
+  html.wtp-custom-cursor [role="tab"],
+  html.wtp-custom-cursor [data-cursor] {
+    cursor: none !important;
+  }
+
+  html.wtp-custom-cursor input,
+  html.wtp-custom-cursor textarea {
+    cursor: text !important;
+  }
+
+  html.wtp-custom-cursor select {
+    cursor: pointer !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Walk The Plan — 1:1 Architectural Spatial Studio",
+  "description": "Experience your future architectural layouts at actual 1:1 scale before construction begins across Gurugram, Dehradun, Varanasi, Hyderabad, and Madurai.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
