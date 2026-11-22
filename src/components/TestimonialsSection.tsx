@@ -28,9 +28,9 @@ export function TestimonialsSection() {
   };
 
   return (
-    <section className="bg-[#E8E3D9] text-[#191A18] py-20 md:py-28 border-b border-[#191A18]/10">
+    <section className="bg-[#E8E3D9] text-[#191A18] py-10 md:py-14 border-b border-[#191A18]/10">
       <div className="mx-auto max-w-[1360px] px-5 md:px-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.18em] text-[#B97856] font-medium mb-3">
               Industry Perspectives &amp; Studio Highlights

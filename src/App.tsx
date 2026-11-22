@@ -84,7 +84,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen bg-[#141516] text-[#F2EDE5] overflow-x-hidden w-full max-w-full">
+      <div className="min-h-screen bg-[#141516] text-[#F2EDE5] overflow-x-clip w-full max-w-full">
         <CustomCursor />
         <ScrollProgress />
         

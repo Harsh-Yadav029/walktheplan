@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { ArchitecturalHero } from '../components/ArchitecturalHero';
+import { Noir3DHero } from '../components/ui/noir-3d-hero';
 import { IntroductionSection } from '../components/IntroductionSection';
 import { ExperienceComparisonSection } from '../components/ExperienceComparisonSection';
 import { SpatialConfigurator } from '../components/SpatialConfigurator';
@@ -34,9 +34,9 @@ export const HomePage = memo(function HomePage({
   presetNote,
 }: HomePageProps) {
   return (
-    <div className="relative w-full luxury-dark-mode bg-[#141516] text-[#F2EDE5] overflow-hidden selection:bg-[#C47B52] selection:text-white">
-      {/* 1. Cinematic Video Hero */}
-      <ArchitecturalHero
+    <div className="relative w-full luxury-dark-mode bg-[#141516] text-[#F2EDE5] overflow-x-clip selection:bg-[#C47B52] selection:text-white">
+      {/* 1. Cinematic 3D Zoom-In Hero (Lenis Noir Pink System) */}
+      <Noir3DHero
         onBookClick={() => onScrollToSection('#book')}
         onExploreClick={() => onScrollToSection('#experience')}
       />

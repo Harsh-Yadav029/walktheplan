@@ -58,7 +58,7 @@ export function FaqSection() {
   return (
     <section
       id="faq"
-      className="w-full bg-[#181A1B] text-[#F5F2EB] py-24 md:py-32 px-4 sm:px-6 relative z-10 border-t border-white/5"
+      className="w-full bg-[#181A1B] text-[#F5F2EB] py-12 md:py-16 px-4 sm:px-6 relative z-10 border-t border-white/5"
     >
       {/* Background copper aurora glow matching the footer */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-[#C47B52]/[0.04] rounded-full blur-[140px] pointer-events-none" />

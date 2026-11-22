@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRouter } from '../lib/router';
 import { FaqSection } from '../components/FaqSection';
+import { Pricing, type PricingPlan } from '../components/ui/pricing';
 import {
   Layers,
   ShieldCheck,
@@ -147,104 +148,37 @@ export function ServicesPage() {
     return `₹${val.toLocaleString('en-IN')}`;
   };
 
+  const pricingPlans: PricingPlan[] = useMemo(() => {
+    return SERVICE_TIERS.map((tier) => ({
+      tierId: tier.id,
+      name: tier.title.toUpperCase(),
+      price: String(tier.price),
+      yearlyPrice: String(Math.round(tier.price * 0.8)),
+      period: tier.duration,
+      features: [...tier.specs, ...tier.features.slice(0, 3)],
+      description: tier.tagline,
+      buttonText: 'Book this package',
+      href: '#book',
+      isPopular: Boolean(tier.popular),
+    }));
+  }, []);
+
   return (
     <div className="relative min-h-screen bg-[#181A1B] text-[#F2EDE5] font-sans selection:bg-[#C47B52] selection:text-white">
-      {/* Hero & Pricing Header */}
-      <section className="relative pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-        <div className="text-center max-w-3xl mx-auto space-y-4 relative z-10">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-extrabold tracking-tight text-white leading-tight">
-            Plans that works best for your <br />
-            <span className="text-[#EED77A] font-serif">Blueprint</span>
-          </h1>
-
-          <p className="text-sm sm:text-base text-[#A5A7A4] max-w-2xl mx-auto leading-relaxed pt-2">
-            Transparent 1:1 scale architectural blueprint walkthrough packages in India. Secure your priority studio session with flexible token payment or reserve your slot now.
-          </p>
-        </div>
-
-        {/* 3 Service Tier Comparison Cards matching the Dark Theme */}
-        <div className="mt-14 grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch relative z-10 max-w-6xl mx-auto">
-          {SERVICE_TIERS.map((tier) => {
-            const isPopular = tier.popular;
-            return (
-              <div
-                key={tier.id}
-                className={`rounded-2xl p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 ${
-                  isPopular
-                    ? 'bg-[#1E2021] border-2 border-[#C47B52] shadow-[0_12px_40px_rgba(0,0,0,0.7)] relative'
-                    : 'bg-[#1E2021] border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:border-white/20'
-                }`}
-              >
-                {/* Popular Pill Badge on Top Right */}
-                {isPopular && (
-                  <div className="absolute -top-3.5 right-6">
-                    <span className="px-3.5 py-1 rounded-full text-[11px] font-bold bg-[#EED77A] text-[#191A18] shadow-md tracking-wider">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
-
-                <div>
-                  <h2 className="text-2xl font-serif font-bold text-white">{tier.title}</h2>
-                  <p className="text-xs text-[#A5A7A4] mt-2 leading-relaxed min-h-[42px]">
-                    {tier.tagline}
-                  </p>
-
-                  {/* Price */}
-                  <div className="mt-6 flex items-baseline gap-1.5">
-                    <span className="text-3xl sm:text-4xl font-extrabold text-white">
-                      {formatPrice(tier.price)}
-                    </span>
-                    <span className="text-xs text-[#A5A7A4]">/ {tier.duration}</span>
-                  </div>
-
-                  {/* Book this package button */}
-                  <button
-                    type="button"
-                    onClick={() => openBookingWizard(tier)}
-                    className={`mt-6 w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md active:scale-[0.99] ${
-                      isPopular
-                        ? 'bg-[#EED77A] hover:bg-[#F4DF8E] text-[#191A18] shadow-amber-500/10'
-                        : 'bg-[#141516] hover:bg-[#282a2b] text-white border border-white/15'
-                    }`}
-                  >
-                    Book this package
-                  </button>
-
-                  {/* Specs Rows with Icons */}
-                  <div className="mt-8 space-y-3.5 pt-6 border-t border-white/10 text-xs text-[#D2D3D0]">
-                    {tier.specs.map((spec, sIdx) => (
-                      <div key={sIdx} className="flex items-center gap-3">
-                        <Layers className={`w-4 h-4 shrink-0 ${isPopular ? 'text-[#C47B52]' : 'text-[#A5A7A4]'}`} />
-                        <span>{spec}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Sub-list with checkmark icons */}
-                  <div className="mt-7 pt-6 border-t border-white/10">
-                    <span className="text-xs font-semibold text-white block mb-3.5">
-                      {isPopular ? 'Everything in 1-Hour, plus:' : 'Package includes:'}
-                    </span>
-                    <div className="space-y-3 text-xs text-[#A5A7A4]">
-                      {tier.features.map((feat, fIdx) => (
-                        <div key={fIdx} className="flex items-center gap-2.5">
-                          <CheckCircle2 className={`w-4 h-4 shrink-0 ${isPopular ? 'text-[#C47B52]' : 'text-[#EED77A]'}`} />
-                          <span>{feat}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-[11px] font-mono text-[#A5A7A4]">
-                  <span>1:1 Scale Floor Projection</span>
-                  <span>{tier.duration} Session</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+      {/* Interactive 3D Pricing Section */}
+      <section className="relative pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+        <Pricing
+          plans={pricingPlans}
+          title="Plans that work best for your Blueprint"
+          description={`Transparent 1:1 scale architectural blueprint walkthrough packages in India.\nSecure your priority studio session with flexible token payment or reserve your slot now.`}
+          currencySymbol="₹"
+          currency="INR"
+          billingToggleText="Annual Architect / Builder Partner Rate"
+          onPlanSelect={(plan) => {
+            const tier = SERVICE_TIERS.find((t) => t.id === plan.tierId);
+            if (tier) openBookingWizard(tier);
+          }}
+        />
       </section>
 
       {/* 4-STAGE MULTI-STEP CHECKOUT MODAL WIZARD */}

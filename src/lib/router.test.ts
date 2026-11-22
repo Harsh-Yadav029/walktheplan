@@ -117,14 +117,19 @@ test('grid-pulse component and hero video asset exist with valid configuration',
   assert.equal(gridProps.ambient, 3);
 });
 
-test('home page component and cinematic hero video are present without canvas/background animation', () => {
+test('home page component and 3d scroll image sequence hero are present and verified', () => {
   const homePagePath = path.resolve(process.cwd(), 'src/pages/HomePage.tsx');
   assert.equal(fs.existsSync(homePagePath), true);
 
   const heroPath = path.resolve(process.cwd(), 'src/components/ArchitecturalHero.tsx');
   const heroContent = fs.readFileSync(heroPath, 'utf-8');
-  assert.equal(heroContent.includes('/videos/hero-cinematic.mp4'), true);
-  // Verify hero animation and background animation are cleanly removed
-  assert.equal(heroContent.includes('Canvas'), false);
-  assert.equal(heroContent.includes('GridPulse'), false);
+  assert.equal(heroContent.includes('canvasRef'), true);
+  assert.equal(heroContent.includes('TOTAL_FRAMES = 300'), true);
+  assert.equal(heroContent.includes('requestAnimationFrame'), true);
+
+  // Verify frames exist
+  const firstFrame = path.resolve(process.cwd(), 'public/frames/ezgif-frame-001.jpg');
+  const lastFrame = path.resolve(process.cwd(), 'public/frames/ezgif-frame-300.jpg');
+  assert.equal(fs.existsSync(firstFrame), true);
+  assert.equal(fs.existsSync(lastFrame), true);
 });

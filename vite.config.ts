@@ -31,6 +31,7 @@ export default defineConfig(() => {
     resolve: {
       alias: [
         { find: 'next/image', replacement: path.resolve(__dirname, 'src/components/ui/next-image.tsx') },
+        { find: 'next/link', replacement: path.resolve(__dirname, 'src/components/ui/next-link.tsx') },
         { find: '@/components/ui', replacement: path.resolve(__dirname, 'src/components/ui') },
         { find: '@/lib', replacement: path.resolve(__dirname, 'src/lib') },
         { find: '@/components', replacement: path.resolve(__dirname, 'src/components') },

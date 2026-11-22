@@ -214,10 +214,10 @@ export function BookingSection({
   return (
     <section
       id="book"
-      className="bg-[#F5F2EB] text-[#191A18] py-20 md:py-28 border-b border-[#191A18]/10"
+      className="bg-[#F5F2EB] text-[#191A18] py-10 md:py-14 border-b border-[#191A18]/10"
     >
       <div className="mx-auto max-w-[1360px] px-5 md:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-8">
           <div className="lg:col-span-7">
             <Reveal>
               <p className="text-xs uppercase tracking-[0.18em] text-[#B97856] font-medium mb-3">

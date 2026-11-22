@@ -18,6 +18,7 @@
     "jsx": "react-jsx",
     "paths": {
       "next/image": ["./src/components/ui/next-image.tsx"],
+      "next/link": ["./src/components/ui/next-link.tsx"],
       "@/*": [
         "./src/*",
         "./*"

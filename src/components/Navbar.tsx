@@ -166,7 +166,7 @@ export function Navbar({ onBookClick, onOpenStoryDrawer }: NavbarProps) {
 
     const handleScroll = () => {
       const y = window.scrollY;
-      setInHero(y < 70);
+      setInHero(y < window.innerHeight * 3.5);
     };
 
     handleScroll();

@@ -836,7 +836,7 @@ export function SpatialConfigurator({ onBookConfiguredSession }: SpatialConfigur
     <section
       ref={sectionRef}
       id="configurator"
-      className="bg-[#F5F2EB] text-[#191A18] py-20 md:py-28 border-b border-[#191A18]/10 overflow-x-clip"
+      className="bg-[#F5F2EB] text-[#191A18] py-10 md:py-14 border-b border-[#191A18]/10 overflow-x-clip"
     >
       <div className="mx-auto max-w-[1360px] px-5 md:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-10">

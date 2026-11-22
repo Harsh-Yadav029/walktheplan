@@ -91,7 +91,7 @@ export function ConsultationSection({ onBookClick }: ConsultationSectionProps) {
   return (
     <section id="contact" className="bg-[#E8E3D9] text-[#191A18]">
       {/* Final Editorial Call To Action */}
-      <div className="bg-[#191A18] text-[#F5F2EB] py-20 md:py-28 border-b border-white/10">
+      <div className="bg-[#191A18] text-[#F5F2EB] py-10 md:py-14 border-b border-white/10">
         <div className="mx-auto max-w-[1360px] px-5 md:px-10 text-center">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.18em] text-[#B97856] font-medium mb-4">
@@ -129,7 +129,7 @@ export function ConsultationSection({ onBookClick }: ConsultationSectionProps) {
       </div>
 
       {/* Streamlined Lead Generation & Project Qualification Form */}
-      <div className="py-20 md:py-28">
+      <div className="py-10 md:py-14">
         <div className="mx-auto max-w-[1360px] px-5 md:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
             <div className="lg:col-span-5 space-y-6">

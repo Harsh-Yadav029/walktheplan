@@ -80,7 +80,7 @@ export function IntroductionSection() {
     <section
       ref={sectionRef}
       id="about"
-      className="bg-[#F5F2EB] text-[#191A18] py-20 md:py-28 border-b border-[#191A18]/10 overflow-x-clip"
+      className="bg-[#F5F2EB] text-[#191A18] py-10 md:py-14 border-b border-[#191A18]/10 overflow-x-clip"
     >
       <div className="mx-auto max-w-[1360px] px-5 md:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-stretch">
@@ -94,21 +94,16 @@ export function IntroductionSection() {
                 Spatial Reality Over Paper Guesswork
               </p>
               <h2 className="font-serif text-[clamp(2.2rem,3.8vw,3.5rem)] leading-[1.08] tracking-[-0.015em] text-[#191A18]">
-                Your Blueprint. Your Space. Your Reality.
+                Where Vision Meets Living Scale.
               </h2>
             </Reveal>
 
             <Reveal delay={0.08} className="space-y-6 text-base leading-[1.75] text-[#191A18]/80 max-w-xl">
               <p>
-                Conventional 2D floor plans and screen-based renders compress an entire home into
-                measurements on paper. Reading “14 ft × 12 ft” never reveals how a six-seater
-                dining table affects your walkway, or whether a master wardrobe door clears the bed.
+                A home is one of the biggest investments a person makes in their lifetime. Yet, for decades, homeowners have been forced to make critical, life-altering decisions based solely on flat blueprints and digital screens. With over 8 years of architectural and site execution experience, our founders recognized a common heartbreak: "People struggle to truly understand a space before it is built."
               </p>
               <p>
-                Walk The Plan eliminates architectural guesswork. Inside our studios, your proposed
-                layout is projected directly onto the floor at exact 1:1 scale so you can walk every
-                corridor, stand in your kitchen, and arrange real-scale furniture before construction
-                begins.
+                Walk The Plan bridges the gap between imagination and physical reality. Inside our calibrated studios, your proposed floor plan is projected onto the floor at exact 1:1 scale so you can walk every room, arrange real modular furniture, verify door clearances, and achieve collaborative Day-1 Plan Freeze before a single brick is laid.
               </p>
             </Reveal>
 
@@ -121,15 +116,15 @@ export function IntroductionSection() {
                   </p>
                 </div>
                 <div>
-                  <p className="font-serif text-3xl text-[#191A18] tabular-nums">5 Cities</p>
+                  <p className="font-serif text-3xl text-[#191A18] tabular-nums">5 Studios</p>
                   <p className="mt-1 text-xs text-[#77746D] leading-relaxed">
-                    Dedicated studios across North & South India
+                    Active experience centers across North & South India
                   </p>
                 </div>
                 <div>
                   <p className="font-serif text-3xl text-[#191A18] tabular-nums">Day 1</p>
                   <p className="mt-1 text-xs text-[#77746D] leading-relaxed">
-                    Stakeholder alignment for faster plan freeze
+                    Stakeholder consensus & collaborative plan freeze
                   </p>
                 </div>
               </div>

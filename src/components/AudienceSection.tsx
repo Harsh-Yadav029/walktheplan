@@ -69,7 +69,7 @@ export function AudienceSection({ onBookClick }: AudienceSectionProps) {
   return (
     <section
       ref={sectionRef}
-      className="bg-[#E8E3D9] text-[#191A18] py-20 md:py-28 border-b border-[#191A18]/10 overflow-x-clip"
+      className="bg-[#E8E3D9] text-[#191A18] py-10 md:py-14 border-b border-[#191A18]/10 overflow-x-clip"
     >
       <div className="mx-auto max-w-[1360px] px-5 md:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12">

@@ -93,7 +93,7 @@ export const BUSINESS_CONTACT = {
   phoneRaw: '919711022075',
   email: 'info@walktheplan.in',
   hours: 'Monday – Sunday, 10:00 AM – 7:00 PM',
-  turnaroundSummary: 'Submit PDF, CAD, or DWG plans ahead of your session for calibrated 1:1 projection readiness.',
+  turnaroundSummary: 'Submit PDF, CAD, or DWG plans 48–72 hours ahead of your session for calibrated 1:1 projection readiness.',
 };
 
 export const STUDIO_LOCATIONS: StudioLocation[] = [
@@ -168,7 +168,7 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     durationLabel: '1 Hour Studio Session',
     durationHours: 1,
     priceInr: 30000,
-    advanceInr: 10000,
+    advanceInr: 5000,
     summary:
       'True 1:1 scale floor plan projection where you physically walk through rooms, verify circulation corridors, test furniture footprints, and mark layout changes before masonry begins.',
     deliverables: [
@@ -186,7 +186,7 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     durationLabel: '2 Hour Studio Session',
     durationHours: 2,
     priceInr: 40000,
-    advanceInr: 15000,
+    advanceInr: 5000,
     isPopular: true,
     summary:
       'Combines full-scale 1:1 floor walking with interactive real-time bare-shell 3D volume exploration so families, architects, and contractors achieve alignment and Day-1 Plan Freeze.',
@@ -205,7 +205,7 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     durationLabel: '3–6 Hour Comprehensive Session',
     durationHours: 4,
     priceInr: 50000,
-    advanceInr: 20000,
+    advanceInr: 5000,
     summary:
       'Comprehensive architectural design validation uniting 1:1 floor projection with photorealistic interior and exterior 3D visualization, lighting mood studies, and material verification.',
     deliverables: [
