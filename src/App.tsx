@@ -7,25 +7,12 @@ import { Navbar } from './components/Navbar';
 import { StoryDrawer } from './components/StoryDrawer';
 import { BottomNavBar, type NavItem } from './components/ui/bottom-nav-bar';
 import { Home, User, Layers, Trophy, LayoutGrid, FileText } from 'lucide-react';
+import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ServicesPage } from './pages/ServicesPage';
 import { FranchisePage } from './pages/FranchisePage';
 import { GalleryPage } from './pages/GalleryPage';
 import { BlogPage } from './pages/BlogPage';
-import { ArchitecturalHero } from './components/ArchitecturalHero';
-import { IntroductionSection } from './components/IntroductionSection';
-import { ExperienceComparisonSection } from './components/ExperienceComparisonSection';
-import { SpatialConfigurator } from './components/SpatialConfigurator';
-import { ServicesSection } from './components/ServicesSection';
-import { AudienceSection } from './components/AudienceSection';
-import { GallerySection } from './components/GallerySection';
-import { ProcessSection } from './components/ProcessSection';
-import { WhyWalkSection } from './components/WhyWalkSection';
-import { StudioLocatorSection } from './components/StudioLocatorSection';
-import { TestimonialsSection } from './components/TestimonialsSection';
-import { BookingSection } from './components/BookingSection';
-import { ConsultationSection } from './components/ConsultationSection';
-import { FaqSection } from './components/FaqSection';
 import { Footer } from './components/Footer';
 import { CustomCursor } from './components/CustomCursor';
 import { ScrollProgress } from './components/ScrollProgress';
@@ -97,9 +84,9 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className={`min-h-screen ${isDarkPage ? 'bg-[#181A1B] text-[#F2EDE5]' : 'bg-[#F5F2EB] text-[#191A18]'} overflow-x-hidden w-full max-w-full`}>
+      <div className="min-h-screen bg-[#141516] text-[#F2EDE5] overflow-x-hidden w-full max-w-full">
         <CustomCursor />
-        {!isDarkPage && <ScrollProgress />}
+        <ScrollProgress />
         
         <Navbar
           onBookClick={() => {
@@ -118,14 +105,14 @@ export default function App() {
           onOpenChange={setIsStoryDrawerOpen}
         />
 
-        <main className={`relative z-10 w-full ${isDarkPage ? 'bg-[#181A1B] border-b border-white/10' : 'bg-[#F5F2EB] border-b border-[#191A18]/10'} shadow-[0_20px_50px_rgba(0,0,0,0.8)]`}>
+        <main className="relative z-10 w-full bg-[#141516] border-b border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={normalizedPath}
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="w-full"
             >
               {isAboutPage ? (
@@ -139,43 +126,15 @@ export default function App() {
               ) : isBlogPage ? (
                 <BlogPage />
               ) : (
-                <>
-                  {/* World-Class Cinematic 3D Hero (Graphite & Copper) */}
-                  <ArchitecturalHero
-                    onBookClick={() => scrollToSection('#book')}
-                    onExploreClick={() => scrollToSection('#experience')}
-                  />
-
-                  <IntroductionSection />
-
-                  <ExperienceComparisonSection />
-
-                  <SpatialConfigurator onBookConfiguredSession={handleBookConfigured} />
-
-                  <ServicesSection onSelectService={handleBookService} />
-
-                  <AudienceSection onBookClick={() => scrollToSection('#contact')} />
-
-                  <GallerySection />
-
-                  <ProcessSection />
-
-                  <WhyWalkSection />
-
-                  <StudioLocatorSection onBookStudio={handleBookStudio} />
-
-                  <TestimonialsSection />
-
-                  <BookingSection
-                    preselectedStudioId={selectedStudioId}
-                    preselectedPackageId={selectedPackageId}
-                    presetNote={presetNote}
-                  />
-
-                  <ConsultationSection onBookClick={() => scrollToSection('#book')} />
-
-                  <FaqSection />
-                </>
+                <HomePage
+                  onScrollToSection={scrollToSection}
+                  onBookService={handleBookService}
+                  onBookStudio={handleBookStudio}
+                  onBookConfigured={handleBookConfigured}
+                  selectedStudioId={selectedStudioId}
+                  selectedPackageId={selectedPackageId}
+                  presetNote={presetNote}
+                />
               )}
             </motion.div>
           </AnimatePresence>

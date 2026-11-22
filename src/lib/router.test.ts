@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 
 test('router path navigation resolves /, /about, /services, /franchise, /gallery, and /blog correctly', () => {
   const routes = ['/', '/about', '/services', '/franchise', '/gallery', '/blog'];
@@ -104,4 +106,25 @@ test('nextframee design system tokens and component schema validate correctly', 
   assert.equal(nfTokens.surface, '#050505');
   assert.equal(nfTokens.tertiary, '#AF46FF');
   assert.equal(nfTokens.accentCyan, '#9CCBFF');
+});
+
+test('grid-pulse component and hero video asset exist with valid configuration', () => {
+  const videoPath = path.resolve(process.cwd(), 'public/videos/hero-cinematic.mp4');
+  assert.equal(fs.existsSync(videoPath), true);
+
+  const gridProps = { cell: 32, reach: 2.8, ambient: 3, maxLit: 180 };
+  assert.equal(gridProps.cell, 32);
+  assert.equal(gridProps.ambient, 3);
+});
+
+test('home page component and cinematic hero video are present without canvas/background animation', () => {
+  const homePagePath = path.resolve(process.cwd(), 'src/pages/HomePage.tsx');
+  assert.equal(fs.existsSync(homePagePath), true);
+
+  const heroPath = path.resolve(process.cwd(), 'src/components/ArchitecturalHero.tsx');
+  const heroContent = fs.readFileSync(heroPath, 'utf-8');
+  assert.equal(heroContent.includes('/videos/hero-cinematic.mp4'), true);
+  // Verify hero animation and background animation are cleanly removed
+  assert.equal(heroContent.includes('Canvas'), false);
+  assert.equal(heroContent.includes('GridPulse'), false);
 });

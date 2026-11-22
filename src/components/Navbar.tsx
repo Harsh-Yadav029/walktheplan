@@ -157,38 +157,22 @@ export function Navbar({ onBookClick, onOpenStoryDrawer }: NavbarProps) {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isMenuOpen]);
 
-  // Synchronize with 3D Hero walkthrough timeline
+  // Synchronize Navbar transparency with Hero viewport scroll
   useEffect(() => {
     if (isDarkPage) {
       setInHero(false);
       return;
     }
 
-    const onHeroScroll = (e: Event) => {
-      const customEvent = e as CustomEvent<{ progress: number; active: boolean }>;
-      if (customEvent.detail) {
-        setHeroProgress(customEvent.detail.progress);
-        setInHero(customEvent.detail.active && customEvent.detail.progress < 0.999);
-      }
-    };
-
-    window.addEventListener('wtp-hero-progress', onHeroScroll);
-
     const handleScroll = () => {
       const y = window.scrollY;
-      const heroHeight = window.innerHeight * 4.5;
-      if (y >= heroHeight) {
-        setInHero(false);
-      } else if (y < 48) {
-        setInHero(true);
-      }
+      setInHero(y < 70);
     };
 
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      window.removeEventListener('wtp-hero-progress', onHeroScroll);
       window.removeEventListener('scroll', handleScroll);
     };
   }, [isDarkPage]);

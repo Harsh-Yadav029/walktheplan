@@ -148,7 +148,7 @@ export function ServicesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#181A1B] text-[#F2EDE5] font-sans selection:bg-[#C47B52] selection:text-white">
+    <div className="relative min-h-screen bg-[#181A1B] text-[#F2EDE5] font-sans selection:bg-[#C47B52] selection:text-white">
       {/* Hero & Pricing Header */}
       <section className="relative pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
         <div className="text-center max-w-3xl mx-auto space-y-4 relative z-10">

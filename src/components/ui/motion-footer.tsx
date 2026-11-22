@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { ArrowUp, Calendar, MessageCircle, Phone, Sparkles } from "lucide-react";
+import { ArrowUp, Calendar, MessageCircle, Sparkles } from "lucide-react";
 
 // Register ScrollTrigger safely for React
 if (typeof window !== "undefined") {
@@ -453,89 +453,6 @@ export function CinematicFooter({
                 >
                   <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform" />
                   {secondaryActionText}
-                </MagneticButton>
-              </div>
-
-              {/* Secondary Navigation Links */}
-              <div className="flex flex-wrap justify-center gap-2.5 md:gap-4 w-full mt-2">
-                <MagneticButton
-                  as="a"
-                  href="/about"
-                  onClick={(e: React.MouseEvent<HTMLElement>) => handleSmoothAnchor(e, "/about")}
-                  className="footer-glass-pill px-5 py-2.5 rounded-full text-[#A5A7A4] font-medium text-xs md:text-sm hover:text-white"
-                >
-                  About Us
-                </MagneticButton>
-                <MagneticButton
-                  as="a"
-                  href="/services"
-                  onClick={(e: React.MouseEvent<HTMLElement>) => handleSmoothAnchor(e, "/services")}
-                  className="footer-glass-pill px-5 py-2.5 rounded-full text-[#A5A7A4] font-medium text-xs md:text-sm hover:text-white"
-                >
-                  Services & Pricing
-                </MagneticButton>
-                <MagneticButton
-                  as="a"
-                  href="#experience"
-                  onClick={(e: React.MouseEvent<HTMLElement>) => handleSmoothAnchor(e, "#experience")}
-                  className="footer-glass-pill px-5 py-2.5 rounded-full text-[#A5A7A4] font-medium text-xs md:text-sm hover:text-white"
-                >
-                  1:1 Experience
-                </MagneticButton>
-                <MagneticButton
-                  as="a"
-                  href="/franchise"
-                  onClick={(e: React.MouseEvent<HTMLElement>) => {
-                    e.preventDefault();
-                    window.history.pushState(null, "", "/franchise");
-                    window.dispatchEvent(new PopStateEvent("popstate"));
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="footer-glass-pill px-5 py-2.5 rounded-full text-[#A5A7A4] font-medium text-xs md:text-sm hover:text-white"
-                >
-                  Franchise Opportunities
-                </MagneticButton>
-                <MagneticButton
-                  as="a"
-                  href="/gallery"
-                  onClick={(e: React.MouseEvent<HTMLElement>) => {
-                    e.preventDefault();
-                    window.history.pushState(null, "", "/gallery");
-                    window.dispatchEvent(new PopStateEvent("popstate"));
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="footer-glass-pill px-5 py-2.5 rounded-full text-[#A5A7A4] font-medium text-xs md:text-sm hover:text-white"
-                >
-                  Gallery
-                </MagneticButton>
-                <MagneticButton
-                  as="a"
-                  href="/blog"
-                  onClick={(e: React.MouseEvent<HTMLElement>) => {
-                    e.preventDefault();
-                    window.history.pushState(null, "", "/blog");
-                    window.dispatchEvent(new PopStateEvent("popstate"));
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="footer-glass-pill px-5 py-2.5 rounded-full text-[#A5A7A4] font-medium text-xs md:text-sm hover:text-white"
-                >
-                  Architectural Blog
-                </MagneticButton>
-                <MagneticButton
-                  as="a"
-                  href="#faq"
-                  onClick={(e: React.MouseEvent<HTMLElement>) => handleSmoothAnchor(e, "#faq")}
-                  className="footer-glass-pill px-5 py-2.5 rounded-full text-[#A5A7A4] font-medium text-xs md:text-sm hover:text-white"
-                >
-                  FAQs
-                </MagneticButton>
-                <MagneticButton
-                  as="a"
-                  href="tel:+919711022075"
-                  className="footer-glass-pill px-5 py-2.5 rounded-full text-[#A5A7A4] font-medium text-xs md:text-sm hover:text-white inline-flex items-center gap-1.5"
-                >
-                  <Phone className="w-3.5 h-3.5 text-[#C47B52]" />
-                  +91 97110 22075
                 </MagneticButton>
               </div>
             </div>

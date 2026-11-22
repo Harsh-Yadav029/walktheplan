@@ -26,7 +26,7 @@ export function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#141516] text-[#F2EDE5] font-sans selection:bg-[#C47B52] selection:text-white">
+    <div className="relative min-h-screen bg-[#141516] text-[#F2EDE5] font-sans selection:bg-[#C47B52] selection:text-white">
       {/* 21st.dev Interactive Story Drawer */}
       <StoryDrawer
         open={isStoryDrawerOpen}

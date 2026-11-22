@@ -137,7 +137,7 @@ export function FranchisePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#181A1B] text-[#F2EDE5] pt-24 md:pt-32 pb-16 selection:bg-[#C47B52] selection:text-white">
+    <div className="relative min-h-screen bg-[#181A1B] text-[#F2EDE5] pt-24 md:pt-32 pb-16 selection:bg-[#C47B52] selection:text-white">
       {/* 1. HERO HEADER */}
       <section className="relative px-4 sm:px-8 max-w-7xl mx-auto text-center mb-16 md:mb-24">
         {/* Subtle Ambient Glow */}

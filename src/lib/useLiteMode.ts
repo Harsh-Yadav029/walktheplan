@@ -40,7 +40,7 @@ export function useLiteMode(): PerformanceMode {
     }
     setWebglSupported(hasWebGL);
 
-    if (!hasWebGL || hasReducedMotion) {
+    if (!hasWebGL) {
       setTier('lite');
       return () => motionQuery.removeEventListener('change', onMotionChange);
     }
@@ -49,7 +49,7 @@ export function useLiteMode(): PerformanceMode {
     const isMobile =
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
-      ) || window.innerWidth < 768;
+      ) || window.innerWidth < 640;
 
     const nav = navigator as unknown as {
       hardwareConcurrency?: number;
@@ -58,7 +58,7 @@ export function useLiteMode(): PerformanceMode {
     const cores = nav.hardwareConcurrency ?? 8;
     const memory = nav.deviceMemory ?? 8;
 
-    if (isMobile || cores <= 4 || memory <= 4) {
+    if (isMobile || cores <= 2 || memory <= 2) {
       setTier('balanced');
     } else {
       setTier('high');

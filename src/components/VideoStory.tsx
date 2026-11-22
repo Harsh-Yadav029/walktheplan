@@ -86,12 +86,15 @@ export function VideoStory({ onBookClick, onExploreClick }: VideoStoryProps) {
       id="video-story"
       className="relative min-h-screen w-full bg-[var(--color-graphite-900)] text-[var(--color-cream-100)] py-16 md:py-24 px-5 md:px-10 overflow-hidden flex flex-col justify-between"
     >
-      {/* Background Graphic Asset with Vignette */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src={active.image}
-          alt={active.title}
-          className="w-full h-full object-cover object-center filter brightness-[0.38] contrast-[1.1] transition-opacity duration-700"
+      {/* Background Cinematic Video Asset with Vignette */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted={muted}
+          playsInline
+          className="w-full h-full object-cover object-center filter brightness-[0.7] contrast-[1.15]"
+          src="/videos/hero-cinematic.mp4"
         />
         <div className="absolute inset-0 wtp-cinematic-vignette" />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-graphite-900)] via-transparent to-[var(--color-graphite-900)]/80" />
