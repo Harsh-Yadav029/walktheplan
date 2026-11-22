@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -6,6 +6,18 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function ScrollProgress() {
   const barRef = useRef<HTMLDivElement | null>(null);
+  const [inHero, setInHero] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroHeight = window.innerHeight * 4.5;
+      setInHero(window.scrollY < heroHeight);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const bar = barRef.current;
@@ -38,7 +50,9 @@ export function ScrollProgress() {
     <div
       data-testid="scroll-progress-track"
       aria-hidden="true"
-      className="pointer-events-none fixed top-0 left-0 right-0 z-[45] h-[2px] bg-transparent"
+      className={`pointer-events-none fixed top-0 left-0 right-0 z-[45] h-[2px] bg-transparent transition-opacity duration-300 ${
+        inHero ? 'opacity-0' : 'opacity-100'
+      }`}
     >
       <div
         ref={barRef}

@@ -29,9 +29,14 @@ export default defineConfig(() => {
       },
     ],
     resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '.'),
-      },
+      alias: [
+        { find: 'next/image', replacement: path.resolve(__dirname, 'src/components/ui/next-image.tsx') },
+        { find: '@/components/ui', replacement: path.resolve(__dirname, 'src/components/ui') },
+        { find: '@/lib', replacement: path.resolve(__dirname, 'src/lib') },
+        { find: '@/components', replacement: path.resolve(__dirname, 'src/components') },
+        { find: '@/assets', replacement: path.resolve(__dirname, 'src/assets') },
+        { find: '@', replacement: path.resolve(__dirname, 'src') },
+      ],
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.

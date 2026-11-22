@@ -17,7 +17,9 @@
     "allowJs": true,
     "jsx": "react-jsx",
     "paths": {
+      "next/image": ["./src/components/ui/next-image.tsx"],
       "@/*": [
+        "./src/*",
         "./*"
       ]
     },
