@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Play } from "lucide-react";
 import { LayoutGrid, type Card } from "./ui/layout-grid";
 import { GALLERY_ITEMS, type GalleryItem } from "../data/siteContent";
+import { useRouter } from "../lib/router";
 
 type GalleryFilter = "All" | GalleryItem["category"];
 
@@ -15,6 +16,7 @@ const FILTERS: GalleryFilter[] = [
 ];
 
 export function GallerySection() {
+  const router = useRouter();
   const [filter, setFilter] = useState<GalleryFilter>("All");
 
   const visibleItems =
@@ -28,6 +30,7 @@ export function GallerySection() {
     category: item.category,
     location: item.location,
     thumbnail: item.image,
+    video: item.video,
     className:
       idx === 0
         ? "md:col-span-2"
@@ -112,6 +115,34 @@ export function GallerySection() {
 
         {/* 3D Animated Expanding LayoutGrid */}
         <LayoutGrid cards={cards} />
+
+        {/* Video Wall CTA Banner */}
+        <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-5 p-6 rounded-2xl bg-gradient-to-r from-white/[0.04] via-white/[0.02] to-transparent border border-white/10 backdrop-blur-sm">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-[#EED77A]/15 border border-[#EED77A]/30 flex items-center justify-center text-[#EED77A] shrink-0">
+              <Play className="w-5 h-5 fill-[#EED77A] ml-0.5" />
+            </div>
+            <div>
+              <h4 className="text-base font-serif font-medium text-white">
+                Live Studio Video Wall &amp; Walkthrough Library
+              </h4>
+              <p className="text-xs text-[#A5A7A4] mt-0.5">
+                Explore all 15 authentic client walkthroughs, builder visits, and architect sessions filmed across India.
+              </p>
+            </div>
+          </div>
+          <a
+            href="/gallery"
+            onClick={(e) => {
+              e.preventDefault();
+              router.navigate('/gallery');
+            }}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#C47B52] hover:bg-[#A85E43] text-white text-xs font-mono uppercase tracking-wider transition-colors shadow-lg cursor-pointer whitespace-nowrap"
+          >
+            <span>View All 15 Studio Videos</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
       </div>
     </section>
   );

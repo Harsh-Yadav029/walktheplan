@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Noir3DHero } from '../components/ui/noir-3d-hero';
-import { IntroductionSection } from '../components/IntroductionSection';
+import { HomeTestDriveSection } from '../components/HomeTestDriveSection';
 import { ExperienceComparisonSection } from '../components/ExperienceComparisonSection';
 import { SpatialConfigurator } from '../components/SpatialConfigurator';
 import { ServicesSection } from '../components/ServicesSection';
@@ -41,8 +41,11 @@ export const HomePage = memo(function HomePage({
         onExploreClick={() => onScrollToSection('#experience')}
       />
 
-      {/* 2. Spatial Reality Over Paper Guesswork (Intro & 1:1 Scale Metrics) */}
-      <IntroductionSection />
+      {/* 2. India's #1 Home Test Drive Video Showcase */}
+      <HomeTestDriveSection
+        onBookClick={() => onScrollToSection('#book')}
+        onExploreGallery={() => onScrollToSection('#gallery')}
+      />
 
       {/* 3. 1:1 Studio Experience vs Paper & 3D Screens */}
       <ExperienceComparisonSection />

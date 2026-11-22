@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { STUDIO_GALLERY_ITEMS } from '../data/galleryContent.ts';
 
 test('router path navigation resolves /, /about, /services, /franchise, /gallery, and /blog correctly', () => {
   const routes = ['/', '/about', '/services', '/franchise', '/gallery', '/blog'];
@@ -132,4 +133,60 @@ test('home page component and 3d scroll image sequence hero are present and veri
   const lastFrame = path.resolve(process.cwd(), 'public/frames/ezgif-frame-300.jpg');
   assert.equal(fs.existsSync(firstFrame), true);
   assert.equal(fs.existsSync(lastFrame), true);
+});
+
+test('studio gallery content contains 15 authentic items across 5 categories', () => {
+  assert.equal(STUDIO_GALLERY_ITEMS.length, 15);
+
+  const videoItems = STUDIO_GALLERY_ITEMS.filter((i) => i.type === 'video');
+  const photoItems = STUDIO_GALLERY_ITEMS.filter((i) => i.type === 'image');
+  assert.equal(videoItems.length, 13);
+  assert.equal(photoItems.length, 2);
+
+  const categories = new Set(STUDIO_GALLERY_ITEMS.map((i) => i.category));
+  assert.equal(categories.has('Builders'), true);
+  assert.equal(categories.has('Architect'), true);
+  assert.equal(categories.has('Featured Collaborations'), true);
+  assert.equal(categories.has('Founder Insights'), true);
+  assert.equal(categories.has('Enduser'), true);
+
+  // Validate item attributes
+  for (const item of STUDIO_GALLERY_ITEMS) {
+    assert.ok(item.id && item.id.length > 0);
+    assert.ok(item.title && item.title.length > 0);
+    assert.ok(item.poster && item.poster.length > 0);
+    assert.ok(item.mediaUrl && item.mediaUrl.length > 0);
+    assert.ok(item.description && item.description.length > 0);
+    assert.ok(item.location && item.location.length > 0);
+  }
+});
+
+test('home test drive section exists and references portrait video asset with mute toggle', () => {
+  const componentPath = path.resolve(process.cwd(), 'src/components/HomeTestDriveSection.tsx');
+  assert.equal(fs.existsSync(componentPath), true);
+
+  const content = fs.readFileSync(componentPath, 'utf-8');
+  assert.equal(content.includes('file-1795272408152-290883819.mp4'), true);
+  assert.equal(content.includes('The Blueprint Revolution'), true);
+  assert.equal(content.includes("INDIA'S 1:1 HOME EXPERIENCE"), true);
+  assert.equal(content.includes("INDIA'S #1 HOME"), true);
+  assert.equal(content.includes('Test Drive.'), true);
+  assert.equal(content.includes("Don't Just Imagine Your Home. Walk Into It."), true);
+  assert.equal(content.includes('RESERVE YOUR EXPERIENCE'), true);
+  assert.equal(content.includes('EXPLORE THE STUDIO'), true);
+  assert.equal(content.includes('DESIGNED TO BE EXPERIENCED. BUILT TO BE PERFECTED.'), true);
+  assert.equal(content.includes('isMuted'), true);
+
+  const videoAsset = path.resolve(process.cwd(), 'public/videos/studio/file-1795272408152-290883819.mp4');
+  assert.equal(fs.existsSync(videoAsset), true);
+});
+
+test('2026 Stage 01 video asset exists and is integrated into studio gallery card', () => {
+  const videoPath = path.resolve(process.cwd(), 'public/videos/studio/20261120_212746_0000.mp4');
+  assert.equal(fs.existsSync(videoPath), true);
+
+  const siteContentPath = path.resolve(process.cwd(), 'src/data/siteContent.ts');
+  const siteContent = fs.readFileSync(siteContentPath, 'utf-8');
+  assert.equal(siteContent.includes('2026 Stage 01 Laser Grid Experience'), true);
+  assert.equal(siteContent.includes('20261120_212746_0000.mp4'), true);
 });

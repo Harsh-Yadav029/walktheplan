@@ -13,6 +13,7 @@ import {
   type BookingRecord,
   type ConsultationInput,
 } from './src/lib/bookingLogic.ts';
+import { STUDIO_GALLERY_ITEMS } from './src/data/galleryContent.ts';
 
 interface ConsultationRecord extends ConsultationInput {
   id: string;
@@ -71,6 +72,10 @@ async function startServer() {
       studios: STUDIO_LOCATIONS,
       packages: SERVICE_PACKAGES,
     });
+  });
+
+  app.get('/api/gallery', (_req, res) => {
+    res.json(STUDIO_GALLERY_ITEMS);
   });
 
   app.get('/api/availability', (req, res) => {

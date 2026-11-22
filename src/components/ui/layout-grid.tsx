@@ -12,6 +12,7 @@ export type Card = {
   title?: string;
   category?: string;
   location?: string;
+  video?: string;
 };
 
 export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
@@ -50,6 +51,12 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
             ) : (
               /* Ambient Card Overlay in Default Grid State */
               <div className="absolute inset-0 z-20 flex flex-col justify-end p-5 sm:p-6 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none">
+                {card.video && (
+                  <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 border border-[#EED77A]/40 text-[10px] font-mono uppercase tracking-wider text-[#EED77A] backdrop-blur-md shadow-lg">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#EED77A] animate-ping" />
+                    <span>2026 Motion Active</span>
+                  </div>
+                )}
                 {card.category && (
                   <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-[#EED77A] mb-1">
                     {card.category} {card.location ? `• ${card.location}` : ""}
@@ -86,6 +93,25 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
 };
 
 const ImageComponent = ({ card }: { card: Card }) => {
+  if (card.video) {
+    return (
+      <div className="absolute inset-0 h-full w-full overflow-hidden select-none">
+        <video
+          src={card.video}
+          poster={card.thumbnail}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className={cn(
+            "object-cover object-center absolute inset-0 h-full w-full transition duration-500 group-hover:scale-105 select-none"
+          )}
+        />
+      </div>
+    );
+  }
+
   return (
     <motion.img
       layoutId={`image-${card.id}-image`}
@@ -93,7 +119,7 @@ const ImageComponent = ({ card }: { card: Card }) => {
       className={cn(
         "object-cover object-center absolute inset-0 h-full w-full transition duration-300 group-hover:scale-105 select-none"
       )}
-      alt="Walk The Plan Studio Thumbnail"
+      alt={card.title || "Walk The Plan Studio Thumbnail"}
     />
   );
 };
@@ -101,14 +127,25 @@ const ImageComponent = ({ card }: { card: Card }) => {
 const SelectedCard = ({ selected }: { selected: Card | null }) => {
   return (
     <div className="bg-transparent h-full w-full flex flex-col justify-end rounded-2xl shadow-2xl relative z-[60] overflow-hidden">
+      {selected?.video && (
+        <video
+          src={selected.video}
+          poster={selected.thumbnail}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover z-0"
+        />
+      )}
       <motion.div
         initial={{
           opacity: 0,
         }}
         animate={{
-          opacity: 0.8,
+          opacity: selected?.video ? 0.75 : 0.8,
         }}
-        className="absolute inset-0 h-full w-full bg-gradient-to-t from-black via-black/70 to-black/30 z-10"
+        className="absolute inset-0 h-full w-full bg-gradient-to-t from-black via-black/75 to-black/30 z-10"
       />
       <motion.div
         layoutId={`content-${selected?.id}`}

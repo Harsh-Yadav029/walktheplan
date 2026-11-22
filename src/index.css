@@ -151,6 +151,10 @@
   font-family: var(--font-tech);
 }
 
+.font-calligraphy {
+  font-family: 'Pinyon Script', 'Alex Brush', cursive;
+}
+
 .wtp-hero-glow {
   box-shadow: 0 0 90px -20px rgba(196, 123, 82, 0.45);
 }
