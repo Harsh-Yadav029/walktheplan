@@ -38,6 +38,19 @@
   --color-stone-muted: #77746D;
   --color-terracotta: #B97856;
 
+  /* NextFramee Design System Core Tokens */
+  --nf-primary: #FFFFFF;
+  --nf-secondary: #364254;
+  --nf-tertiary: #AF46FF;
+  --nf-neutral: #000000;
+  --nf-surface: #050505;
+  --nf-on-surface: #FFFFFF;
+  --nf-error: #FF5A5F;
+  --nf-border-subtle: rgba(255, 255, 255, 0.1);
+  --nf-accent-cyan: #9CCBFF;
+  --nf-accent-pink: #F5B8C8;
+  --nf-accent-violet: #C4A7FF;
+
   /* Graphite & Copper */
   --color-graphite-900: #181A1B;
   --color-graphite-800: #202223;
@@ -91,6 +104,81 @@
 .wtp-chapter-fade {
   transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
     transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* NextFramee Typography Utilities */
+.nf-headline-display {
+  font-family: Arial, system-ui, sans-serif;
+  font-size: clamp(32px, 5vw, 60px);
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: 9px;
+  text-transform: uppercase;
+}
+
+.nf-headline-lg {
+  font-family: Arial, system-ui, sans-serif;
+  font-size: clamp(28px, 4.5vw, 56px);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -1.4px;
+}
+
+.nf-headline-md {
+  font-family: Arial, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 28px;
+  letter-spacing: 0px;
+}
+
+.nf-headline-sm {
+  font-family: Arial, system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 22px;
+  letter-spacing: 0px;
+}
+
+.nf-body-lg {
+  font-family: "Geist Mono", "Space Grotesk", monospace;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 24px;
+  letter-spacing: 1.2px;
+}
+
+.nf-body-md {
+  font-family: "Geist Mono", "Space Grotesk", monospace;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 22px;
+  letter-spacing: 1px;
+}
+
+.nf-body-sm {
+  font-family: "Geist Mono", "Space Grotesk", monospace;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 18px;
+  letter-spacing: 1px;
+}
+
+.nf-eyebrow {
+  font-family: "Geist Mono", "Space Grotesk", monospace;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 16px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.nf-glow-cyan {
+  box-shadow: 0 0 60px -15px rgba(156, 203, 255, 0.35);
+}
+
+.nf-glow-violet {
+  box-shadow: 0 0 70px -15px rgba(175, 70, 255, 0.4);
 }
 
 @media (pointer: fine) and (prefers-reduced-motion: no-preference) {

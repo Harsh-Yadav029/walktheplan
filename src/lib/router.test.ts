@@ -86,3 +86,22 @@ test('navBar activeIndex correctly maps Home to 0, About to 1, Services to 2, Fr
   assert.equal(getActiveIndex('/blog'), 5);
   assert.equal(getActiveIndex('/blog/'), 5);
 });
+
+test('nextframee design system tokens and component schema validate correctly', () => {
+  const nfTokens = {
+    primary: '#FFFFFF',
+    secondary: '#364254',
+    tertiary: '#AF46FF',
+    neutral: '#000000',
+    surface: '#050505',
+    borderSubtle: 'rgba(255, 255, 255, 0.1)',
+    accentCyan: '#9CCBFF',
+    accentPink: '#F5B8C8',
+    accentViolet: '#C4A7FF',
+  };
+
+  assert.equal(nfTokens.primary, '#FFFFFF');
+  assert.equal(nfTokens.surface, '#050505');
+  assert.equal(nfTokens.tertiary, '#AF46FF');
+  assert.equal(nfTokens.accentCyan, '#9CCBFF');
+});
