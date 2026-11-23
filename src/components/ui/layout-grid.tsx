@@ -93,10 +93,19 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
 };
 
 const ImageComponent = ({ card }: { card: Card }) => {
+  const handleVideoMount = (el: HTMLVideoElement | null) => {
+    if (el) {
+      el.defaultMuted = true;
+      el.muted = true;
+      el.play().catch(() => {});
+    }
+  };
+
   if (card.video) {
     return (
-      <div className="absolute inset-0 h-full w-full overflow-hidden select-none">
+      <div className="absolute inset-0 h-full w-full overflow-hidden select-none bg-black">
         <video
+          ref={handleVideoMount}
           src={card.video}
           poster={card.thumbnail}
           autoPlay
@@ -108,6 +117,8 @@ const ImageComponent = ({ card }: { card: Card }) => {
             "object-cover object-center absolute inset-0 h-full w-full transition duration-500 group-hover:scale-105 select-none"
           )}
         />
+        {/* Subtle glowing border accent on hover */}
+        <div className="absolute inset-0 rounded-2xl border border-transparent group-hover:border-[#EED77A]/40 transition-colors pointer-events-none" />
       </div>
     );
   }
@@ -129,6 +140,13 @@ const SelectedCard = ({ selected }: { selected: Card | null }) => {
     <div className="bg-transparent h-full w-full flex flex-col justify-end rounded-2xl shadow-2xl relative z-[60] overflow-hidden">
       {selected?.video && (
         <video
+          ref={(el) => {
+            if (el) {
+              el.defaultMuted = true;
+              el.muted = true;
+              el.play().catch(() => {});
+            }
+          }}
           src={selected.video}
           poster={selected.thumbnail}
           autoPlay

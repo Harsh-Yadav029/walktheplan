@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { ChevronDown, ChevronUp, Eye, Layers, Maximize2, RotateCcw } from 'lucide-react';
+import { ChevronDown, ChevronUp, Eye, Layers, Maximize2, RotateCcw, Sparkles } from 'lucide-react';
 import { Reveal } from './MotionPrimitives';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -94,14 +94,26 @@ function createBlueprintFloorTexture(
   const ctx = canvas.getContext('2d')!;
 
   const isProjection = mode === 'projection';
-  ctx.fillStyle = isProjection ? '#191A18' : palette.floorHex;
+  const isBareShell = mode === 'bareshell';
+
+  if (isProjection) {
+    ctx.fillStyle = '#141516';
+  } else if (isBareShell) {
+    ctx.fillStyle = '#222527';
+  } else {
+    ctx.fillStyle = palette.floorHex;
+  }
   ctx.fillRect(0, 0, 1024, 1024);
 
   // Subtle architectural grid
   const majorStep = 128;
   const minorStep = 32;
 
-  ctx.strokeStyle = isProjection ? 'rgba(255,255,255,0.1)' : 'rgba(25,26,24,0.09)';
+  ctx.strokeStyle = isProjection
+    ? 'rgba(238, 215, 122, 0.12)'
+    : isBareShell
+    ? 'rgba(255, 255, 255, 0.08)'
+    : 'rgba(25, 26, 24, 0.1)';
   ctx.lineWidth = 1;
   for (let i = 0; i <= 1024; i += minorStep) {
     ctx.beginPath();
@@ -115,8 +127,12 @@ function createBlueprintFloorTexture(
     ctx.stroke();
   }
 
-  ctx.strokeStyle = isProjection ? 'rgba(185,120,86,0.52)' : 'rgba(25,26,24,0.18)';
-  ctx.lineWidth = isProjection ? 2.2 : 1.5;
+  ctx.strokeStyle = isProjection
+    ? 'rgba(196, 123, 82, 0.65)'
+    : isBareShell
+    ? 'rgba(196, 123, 82, 0.4)'
+    : 'rgba(25, 26, 24, 0.2)';
+  ctx.lineWidth = isProjection ? 2.5 : 1.5;
   for (let i = 0; i <= 1024; i += majorStep) {
     ctx.beginPath();
     ctx.moveTo(i, 0);
@@ -131,9 +147,12 @@ function createBlueprintFloorTexture(
 
   // Projection laser border
   if (isProjection) {
-    ctx.strokeStyle = 'rgba(255,255,255,0.72)';
-    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'rgba(238, 215, 122, 0.85)';
+    ctx.lineWidth = 6;
     ctx.strokeRect(48, 48, 928, 928);
+    ctx.strokeStyle = 'rgba(196, 123, 82, 0.45)';
+    ctx.lineWidth = 12;
+    ctx.strokeRect(44, 44, 936, 936);
   }
 
   const tex = new THREE.CanvasTexture(canvas);
@@ -238,8 +257,8 @@ export function SpatialConfigurator({ onBookConfiguredSession }: SpatialConfigur
     renderer.domElement.addEventListener('webglcontextrestored', handleContextRestored);
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#E8E3D9');
-    scene.fog = new THREE.Fog('#E8E3D9', 26, 60);
+    scene.background = new THREE.Color('#141516');
+    scene.fog = new THREE.Fog('#141516', 24, 60);
 
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     const roomEnv = new RoomEnvironment();
@@ -260,11 +279,11 @@ export function SpatialConfigurator({ onBookConfiguredSession }: SpatialConfigur
     controls.target.set(...CAMERA_PRESETS.isometric.target);
     controls.update();
 
-    // Lighting rig: calibrated warm key + cool hemisphere + subtle rim
-    const hemiLight = new THREE.HemisphereLight(0xd2dde8, 0x5c5042, 0.48);
+    // Lighting rig: calibrated warm key + cool hemisphere + terracotta rim
+    const hemiLight = new THREE.HemisphereLight(0xdce8f5, 0x181a1b, 0.65);
     scene.add(hemiLight);
 
-    const keyLight = new THREE.DirectionalLight(0xfff0d8, 1.18);
+    const keyLight = new THREE.DirectionalLight(0xfff0db, 1.45);
     keyLight.position.set(11, 16, 9);
     keyLight.castShadow = !isSoftwareGl;
     keyLight.shadow.mapSize.set(1024, 1024);
@@ -278,15 +297,15 @@ export function SpatialConfigurator({ onBookConfiguredSession }: SpatialConfigur
     keyLight.shadow.normalBias = 0.02;
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0xdce4f0, 0.42);
+    const rimLight = new THREE.DirectionalLight(0xc47b52, 0.65);
     rimLight.position.set(-10, 8, -10);
     scene.add(rimLight);
 
     // Studio Ground Base
     const studioBaseMat = new THREE.MeshStandardMaterial({
-      color: 0xd0c9bc,
-      roughness: 0.94,
-      metalness: 0.02,
+      color: 0x181a1b,
+      roughness: 0.9,
+      metalness: 0.04,
     });
     const studioBase = new THREE.Mesh(new THREE.PlaneGeometry(90, 90), studioBaseMat);
     studioBase.rotation.x = -Math.PI / 2;
@@ -300,8 +319,8 @@ export function SpatialConfigurator({ onBookConfiguredSession }: SpatialConfigur
 
     // Architectural dark plinth beneath the floor slab
     const plinthMat = new THREE.MeshStandardMaterial({
-      color: 0x191a18,
-      roughness: 0.85,
+      color: 0x101112,
+      roughness: 0.88,
       metalness: 0.05,
     });
     const plinthMesh = new THREE.Mesh(new THREE.BoxGeometry(14.9, 0.14, 12.2), plinthMat);
@@ -348,20 +367,20 @@ export function SpatialConfigurator({ onBookConfiguredSession }: SpatialConfigur
       depthWrite: false,
     });
     const accentMat = new THREE.MeshStandardMaterial({
-      color: 0xb97856,
+      color: 0xc47b52,
       roughness: 0.45,
       metalness: 0.15,
     });
-    const lineMat = new THREE.LineBasicMaterial({ color: 0xffffff });
+    const lineMat = new THREE.LineBasicMaterial({ color: 0xeed77a });
     const wallEdgeMat = new THREE.LineBasicMaterial({
-      color: 0x191a18,
+      color: 0xc47b52,
       transparent: true,
-      opacity: 0.24,
+      opacity: 0.35,
     });
     const clearanceMat = new THREE.MeshBasicMaterial({
-      color: 0xb97856,
+      color: 0xc47b52,
       transparent: true,
-      opacity: 0.36,
+      opacity: 0.45,
       side: THREE.DoubleSide,
       depthWrite: false,
     });
@@ -706,9 +725,9 @@ export function SpatialConfigurator({ onBookConfiguredSession }: SpatialConfigur
           stoneMat.color.set('#DCCFC0');
         }
 
-        scene.background = new THREE.Color(isProjection ? '#191A18' : '#E8E3D9');
-        scene.fog = new THREE.Fog(isProjection ? '#191A18' : '#E8E3D9', 26, 60);
-        studioBaseMat.color.set(isProjection ? '#141513' : '#DAD4C8');
+        scene.background = new THREE.Color('#141516');
+        scene.fog = new THREE.Fog('#141516', 24, 60);
+        studioBaseMat.color.set(isProjection ? '#101112' : '#181A1B');
 
         blueprintOutlineGroup.visible = isProjection || cl;
         clearanceGroup.visible = cl;
@@ -836,30 +855,31 @@ export function SpatialConfigurator({ onBookConfiguredSession }: SpatialConfigur
     <section
       ref={sectionRef}
       id="configurator"
-      className="bg-[#F5F2EB] text-[#191A18] py-10 md:py-14 border-b border-[#191A18]/10 overflow-x-clip"
+      className="relative w-full py-12 md:py-20 bg-[#141516] text-[#F2EDE5] border-b border-white/10 overflow-hidden select-none"
     >
-      <div className="mx-auto max-w-[1360px] px-5 md:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-10">
-          <div className="lg:col-span-7">
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-8 md:px-10">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+          <div className="space-y-4 max-w-2xl">
             <Reveal>
-              <p className="text-xs uppercase tracking-[0.18em] text-[#B97856] font-medium mb-3">
-                Interactive 3D Spatial Configurator
-              </p>
-              <h2 className="font-serif text-[clamp(2rem,3.6vw,3.25rem)] leading-[1.08] tracking-[-0.015em]">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C47B52]/15 border border-[#C47B52]/30 text-xs font-mono uppercase tracking-widest text-[#EED77A] mb-3">
+                <Sparkles className="w-3.5 h-3.5 text-[#C47B52]" />
+                <span>Interactive 3D Spatial Configurator</span>
+              </div>
+              <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08]">
                 Preview Your Floor Plan Transformation in Real Time.
               </h2>
             </Reveal>
           </div>
-          <div className="lg:col-span-5">
-            <Reveal delay={0.1} className="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end justify-between gap-4">
-              <p className="text-sm text-[#77746D] lg:text-right max-w-md">
+          <div className="max-w-md">
+            <Reveal delay={0.1} className="flex flex-col items-start lg:items-end justify-between gap-4">
+              <p className="text-sm sm:text-base text-[#A5A7A4] font-light leading-relaxed lg:text-right">
                 Orbit freely, switch between our 1:1 floor projection grid, bare-shell 3D volume,
                 and interior materiality, and inspect live spatial clearances.
               </p>
               <button
                 type="button"
                 onClick={() => onBookConfiguredSession(activePreset.name)}
-                className="inline-flex items-center gap-2 bg-[#191A18] px-5 py-2.5 text-xs font-medium uppercase tracking-[0.12em] text-[#F5F2EB] hover:bg-[#B97856] transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-2 bg-[#EED77A] hover:bg-[#F4DF8E] px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider text-[#191A18] transition-all cursor-pointer whitespace-nowrap shrink-0 shadow-lg shadow-[#EED77A]/20"
               >
                 <span>Book {activePreset.name} Walkthrough</span>
               </button>
@@ -869,227 +889,243 @@ export function SpatialConfigurator({ onBookConfiguredSession }: SpatialConfigur
 
         {/* Unobstructed 3D Viewport Container */}
         <Reveal delay={0.12} yOffset={24}>
-        <div
-          ref={viewportWrapRef}
-          className="relative w-full h-[580px] md:h-[660px] border border-[#191A18]/15 overflow-hidden bg-[#E8E3D9] will-change-transform"
-          data-testid="spatial-3d-viewport"
-          data-view-mode={viewMode}
-          data-preset={presetId}
-        >
-          {/* Dedicated isolated Three.js canvas mount */}
-          <div ref={mountRef} data-cursor="Explore" className="absolute inset-0 w-full h-full" />
+          <div
+            ref={viewportWrapRef}
+            className="relative w-full h-[600px] md:h-[680px] rounded-3xl border border-white/10 overflow-hidden bg-[#121314] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] will-change-transform"
+            data-testid="spatial-3d-viewport"
+            data-view-mode={viewMode}
+            data-preset={presetId}
+          >
+            {/* Dedicated isolated Three.js canvas mount */}
+            <div
+              ref={mountRef}
+              data-cursor-label="Explore"
+              className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing select-none"
+            />
 
-          {webglUnavailable && (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-8 text-center bg-[#E8E3D9] text-[#191A18]">
-              <p className="font-serif text-2xl">Interactive 3D Preview Unavailable</p>
-              <p className="mt-2 text-sm text-[#77746D] max-w-md">
-                Hardware or software WebGL acceleration is disabled in this browser. Book a live
-                studio session to experience full 1:1 projection and VR walkthroughs in person.
-              </p>
-            </div>
-          )}
-
-          {/* Top-Left Minimal Spec Strip (Solid rgba surface, no backdrop-blur over WebGL) */}
-          <div className="pointer-events-none absolute top-4 left-4 right-4 z-10 flex flex-wrap items-center justify-between gap-3">
-            <div className="pointer-events-auto bg-[#F5F2EB]/95 border border-[#191A18]/15 px-4 py-2.5 text-xs">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[#191A18]">
-                <span className="font-semibold">{activePreset.name}</span>
-                <span aria-hidden="true" className="text-[#77746D]">·</span>
-                <span className="tabular-nums font-medium">
-                  {metrics.totalAreaSqFt.toLocaleString('en-IN')} sq.ft.
-                </span>
-                <span aria-hidden="true" className="text-[#77746D]">·</span>
-                <span className="tabular-nums text-[#77746D]">
-                  {metrics.widthFeet}&apos; × {metrics.depthFeet}&apos;
-                </span>
-                <span aria-hidden="true" className="text-[#77746D]">·</span>
-                <span className="tabular-nums text-[#B97856] font-medium">
-                  {metrics.circulationClearancePct}% Circulation Clearance
-                </span>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => {
-                setCameraPreset('isometric');
-                sceneCtrlRef.current?.resetView();
-              }}
-              aria-label="Reset 3D camera view"
-              className="pointer-events-auto inline-flex items-center gap-1.5 bg-[#F5F2EB]/95 border border-[#191A18]/15 px-3 py-2 text-xs font-medium text-[#191A18] hover:border-[#B97856] transition-colors cursor-pointer whitespace-nowrap shrink-0"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset Orbit</span>
-            </button>
-          </div>
-
-          {/* Collapsible Bottom Control Dock (Zero Center Occlusion) */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 w-[min(1040px,calc(100%-2rem))] flex flex-col items-center">
-            <button
-              type="button"
-              onClick={() => setControlsCollapsed((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 bg-[#191A18] text-[#F5F2EB] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] cursor-pointer hover:bg-[#B97856] transition-colors"
-            >
-              {controlsCollapsed ? (
-                <>
-                  <ChevronUp className="w-3.5 h-3.5" />
-                  <span>Show Controls</span>
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="w-3.5 h-3.5" />
-                  <span>Hide Controls</span>
-                </>
-              )}
-            </button>
-
-            {!controlsCollapsed && (
-              <div className="w-full bg-[#F5F2EB]/96 border border-[#191A18]/18 p-3.5 md:p-4 shadow-lg">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-                  {/* Layout Presets */}
-                  <div className="md:col-span-5">
-                    <p className="text-[11px] uppercase tracking-[0.12em] text-[#77746D] mb-1.5 flex items-center gap-1.5">
-                      <Maximize2 className="w-3 h-3" />
-                      <span>Architectural Layout</span>
-                    </p>
-                    <div className="flex flex-wrap md:flex-nowrap gap-1">
-                      {SPATIAL_PRESETS.map((p) => (
-                        <button
-                          key={p.id}
-                          type="button"
-                          onClick={() => setPresetId(p.id)}
-                          className={`px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                            presetId === p.id
-                              ? 'bg-[#191A18] text-[#F5F2EB]'
-                              : 'bg-[#E8E3D9] text-[#191A18] hover:bg-[#ded7c9]'
-                          }`}
-                        >
-                          {p.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Visualization Layer */}
-                  <div className="md:col-span-4">
-                    <p className="text-[11px] uppercase tracking-[0.12em] text-[#77746D] mb-1.5 flex items-center gap-1.5">
-                      <Layers className="w-3 h-3" />
-                      <span>Spatial Layer</span>
-                    </p>
-                    <div className="flex flex-wrap md:flex-nowrap gap-1">
-                      {(
-                        [
-                          { id: 'projection', label: '1:1 Projection' },
-                          { id: 'bareshell', label: 'Bare-Shell 3D' },
-                          { id: 'interior', label: 'Interior 3D' },
-                        ] as const
-                      ).map((layer) => (
-                        <button
-                          key={layer.id}
-                          type="button"
-                          onClick={() => setViewMode(layer.id)}
-                          className={`px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                            viewMode === layer.id
-                              ? 'bg-[#B97856] text-white'
-                              : 'bg-[#E8E3D9] text-[#191A18] hover:bg-[#ded7c9]'
-                          }`}
-                        >
-                          {layer.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Camera Angle */}
-                  <div className="md:col-span-3">
-                    <p className="text-[11px] uppercase tracking-[0.12em] text-[#77746D] mb-1.5 flex items-center gap-1.5">
-                      <Eye className="w-3 h-3" />
-                      <span>Camera View</span>
-                    </p>
-                    <div className="flex flex-wrap md:flex-nowrap gap-1">
-                      {(Object.keys(CAMERA_PRESETS) as CameraPreset[]).map((camKey) => (
-                        <button
-                          key={camKey}
-                          type="button"
-                          onClick={() => handleCameraPreset(camKey)}
-                          className={`px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                            cameraPreset === camKey
-                              ? 'bg-[#191A18] text-[#F5F2EB]'
-                              : 'bg-[#E8E3D9] text-[#191A18] hover:bg-[#ded7c9]'
-                          }`}
-                        >
-                          {CAMERA_PRESETS[camKey].label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Second Slim Row: Finish Palette, Scale Adjuster & Clearance Toggle */}
-                <div className="mt-3 pt-3 border-t border-[#191A18]/10 flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] uppercase tracking-[0.12em] text-[#77746D]">
-                      Palette:
-                    </span>
-                    <div className="flex items-center gap-1.5">
-                      {FINISH_PALETTES.map((pal) => (
-                        <button
-                          key={pal.id}
-                          type="button"
-                          onClick={() => setPaletteId(pal.id)}
-                          aria-label={`Select ${pal.label} finish`}
-                          className={`inline-flex items-center gap-1.5 px-2 py-1 text-xs border transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                            paletteId === pal.id
-                              ? 'border-[#191A18] bg-white text-[#191A18]'
-                              : 'border-transparent text-[#77746D] hover:text-[#191A18]'
-                          }`}
-                        >
-                          <span
-                            className="w-3 h-3 rounded-full border border-[#191A18]/20"
-                            style={{ backgroundColor: pal.swatch }}
-                          />
-                          <span className="hidden sm:inline">{pal.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-4">
-                    <label className="inline-flex items-center gap-2 text-xs text-[#191A18]">
-                      <span className="text-[11px] uppercase tracking-[0.12em] text-[#77746D]">
-                        Bay Scale:
-                      </span>
-                      <input
-                        type="range"
-                        min={0.85}
-                        max={1.2}
-                        step={0.05}
-                        value={scaleMultiplier}
-                        onChange={(e) => setScaleMultiplier(Number(e.target.value))}
-                        className="w-20 accent-[#B97856] cursor-pointer"
-                      />
-                      <span className="tabular-nums font-medium w-10">
-                        {Math.round(scaleMultiplier * 100)}%
-                      </span>
-                    </label>
-
-                    <button
-                      type="button"
-                      onClick={() => setShowClearance((prev) => !prev)}
-                      className={`px-3 py-1 text-xs font-medium border transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                        showClearance
-                          ? 'bg-[#B97856]/15 border-[#B97856] text-[#191A18]'
-                          : 'bg-transparent border-[#191A18]/20 text-[#77746D]'
-                      }`}
-                    >
-                      Door Swings {showClearance ? 'On' : 'Off'}
-                    </button>
-                  </div>
-                </div>
+            {webglUnavailable && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-8 text-center bg-[#181A1B] text-white">
+                <p className="font-serif text-2xl">Interactive 3D Preview Unavailable</p>
+                <p className="mt-2 text-sm text-[#A5A7A4] max-w-md">
+                  Hardware or software WebGL acceleration is disabled in this browser. Book a live
+                  studio session to experience full 1:1 projection and VR walkthroughs in person.
+                </p>
               </div>
             )}
+
+            {/* Top-Left Minimal Spec Strip */}
+            <div className="pointer-events-none absolute top-4 left-4 right-4 z-10 flex flex-wrap items-center justify-between gap-3">
+              <div className="pointer-events-auto bg-[#181A1B]/90 backdrop-blur-md border border-white/10 rounded-xl px-4 py-2.5 text-xs shadow-xl">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white">
+                  <span className="font-serif font-bold text-[#EED77A]">{activePreset.name}</span>
+                  <span aria-hidden="true" className="text-white/20">·</span>
+                  <span className="font-mono tabular-nums text-white/90">
+                    {metrics.totalAreaSqFt.toLocaleString('en-IN')} sq.ft.
+                  </span>
+                  <span aria-hidden="true" className="text-white/20">·</span>
+                  <span className="font-mono tabular-nums text-[#A5A7A4]">
+                    {metrics.widthFeet}&apos; × {metrics.depthFeet}&apos;
+                  </span>
+                  <span aria-hidden="true" className="text-white/20">·</span>
+                  <span className="font-mono tabular-nums text-[#C47B52] font-semibold">
+                    {metrics.circulationClearancePct}% Circulation Clearance
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setCameraPreset('isometric');
+                  sceneCtrlRef.current?.resetView();
+                }}
+                aria-label="Reset 3D camera view"
+                className="pointer-events-auto inline-flex items-center gap-2 bg-[#181A1B]/90 hover:bg-[#C47B52] border border-white/10 hover:border-[#C47B52] px-3.5 py-2 rounded-xl text-xs font-mono uppercase tracking-wider text-white transition-all cursor-pointer shadow-xl shrink-0"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-[#EED77A]" />
+                <span>Reset Orbit</span>
+              </button>
+            </div>
+
+            {/* Collapsible Bottom Control Dock */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 w-[min(1080px,calc(100%-2rem))] flex flex-col items-center">
+              <button
+                type="button"
+                onClick={() => setControlsCollapsed((prev) => !prev)}
+                className="inline-flex items-center gap-2 bg-[#181A1B]/95 hover:bg-[#C47B52] text-[#EED77A] hover:text-white border border-white/15 hover:border-[#C47B52] px-4 py-1.5 text-[11px] font-mono uppercase tracking-widest cursor-pointer transition-colors rounded-t-xl shadow-lg"
+              >
+                {controlsCollapsed ? (
+                  <>
+                    <ChevronUp className="w-3.5 h-3.5" />
+                    <span>Configure Space</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-3.5 h-3.5" />
+                    <span>Hide Controls</span>
+                  </>
+                )}
+              </button>
+
+              {!controlsCollapsed && (
+                <div className="w-full bg-[#181A1B]/95 backdrop-blur-xl border border-white/15 rounded-2xl rounded-t-none p-4 sm:p-5 shadow-2xl space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                    {/* Layout Presets */}
+                    <div className="md:col-span-5">
+                      <p className="text-[11px] font-mono uppercase tracking-widest text-[#EED77A] mb-2 flex items-center gap-1.5">
+                        <Maximize2 className="w-3 h-3 text-[#C47B52]" />
+                        <span>Architectural Layout</span>
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {SPATIAL_PRESETS.map((p) => {
+                          const isSelected = presetId === p.id;
+                          return (
+                            <button
+                              key={p.id}
+                              type="button"
+                              onClick={() => setPresetId(p.id)}
+                              className={`px-3 py-1.5 text-xs font-mono rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                                isSelected
+                                  ? 'bg-[#C47B52] text-white font-semibold shadow-md shadow-[#C47B52]/25'
+                                  : 'bg-white/5 border border-white/10 text-[#A5A7A4] hover:text-white hover:bg-white/10'
+                              }`}
+                            >
+                              {p.name}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Visualization Layer */}
+                    <div className="md:col-span-4">
+                      <p className="text-[11px] font-mono uppercase tracking-widest text-[#EED77A] mb-2 flex items-center gap-1.5">
+                        <Layers className="w-3 h-3 text-[#C47B52]" />
+                        <span>Spatial Layer</span>
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(
+                          [
+                            { id: 'projection', label: '1:1 Projection' },
+                            { id: 'bareshell', label: 'Bare-Shell 3D' },
+                            { id: 'interior', label: 'Interior 3D' },
+                          ] as const
+                        ).map((layer) => {
+                          const isSelected = viewMode === layer.id;
+                          return (
+                            <button
+                              key={layer.id}
+                              type="button"
+                              onClick={() => setViewMode(layer.id)}
+                              className={`px-3 py-1.5 text-xs font-mono rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                                isSelected
+                                  ? 'bg-[#EED77A] text-[#191A18] font-bold shadow-md shadow-[#EED77A]/25'
+                                  : 'bg-white/5 border border-white/10 text-[#A5A7A4] hover:text-white hover:bg-white/10'
+                              }`}
+                            >
+                              {layer.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Camera Angle */}
+                    <div className="md:col-span-3">
+                      <p className="text-[11px] font-mono uppercase tracking-widest text-[#EED77A] mb-2 flex items-center gap-1.5">
+                        <Eye className="w-3 h-3 text-[#C47B52]" />
+                        <span>Camera View</span>
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(Object.keys(CAMERA_PRESETS) as CameraPreset[]).map((camKey) => {
+                          const isSelected = cameraPreset === camKey;
+                          return (
+                            <button
+                              key={camKey}
+                              type="button"
+                              onClick={() => handleCameraPreset(camKey)}
+                              className={`px-2.5 py-1.5 text-xs font-mono rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                                isSelected
+                                  ? 'bg-[#C47B52] text-white font-semibold shadow-md shadow-[#C47B52]/25'
+                                  : 'bg-white/5 border border-white/10 text-[#A5A7A4] hover:text-white hover:bg-white/10'
+                              }`}
+                            >
+                              {CAMERA_PRESETS[camKey].label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Second Row: Finish Palette, Scale Adjuster & Clearance Toggle */}
+                  <div className="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[11px] font-mono uppercase tracking-widest text-[#A5A7A4]">
+                        Palette:
+                      </span>
+                      <div className="flex items-center gap-2">
+                        {FINISH_PALETTES.map((pal) => {
+                          const isSelected = paletteId === pal.id;
+                          return (
+                            <button
+                              key={pal.id}
+                              type="button"
+                              onClick={() => setPaletteId(pal.id)}
+                              aria-label={`Select ${pal.label} finish`}
+                              className={`inline-flex items-center gap-2 px-2.5 py-1 text-xs font-mono rounded-lg border transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                                isSelected
+                                  ? 'border-[#EED77A] bg-white/10 text-white font-semibold'
+                                  : 'border-white/10 text-[#A5A7A4] hover:text-white hover:bg-white/5'
+                              }`}
+                            >
+                              <span
+                                className="w-3 h-3 rounded-full border border-white/30"
+                                style={{ backgroundColor: pal.swatch }}
+                              />
+                              <span className="hidden sm:inline">{pal.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-4">
+                      <label className="inline-flex items-center gap-2 text-xs font-mono text-[#F2EDE5]">
+                        <span className="text-[11px] uppercase tracking-widest text-[#A5A7A4]">
+                          Bay Scale:
+                        </span>
+                        <input
+                          type="range"
+                          min={0.85}
+                          max={1.2}
+                          step={0.05}
+                          value={scaleMultiplier}
+                          onChange={(e) => setScaleMultiplier(Number(e.target.value))}
+                          className="w-24 accent-[#C47B52] cursor-pointer"
+                        />
+                        <span className="tabular-nums font-mono font-semibold text-[#EED77A] w-10">
+                          {Math.round(scaleMultiplier * 100)}%
+                        </span>
+                      </label>
+
+                      <button
+                        type="button"
+                        onClick={() => setShowClearance((prev) => !prev)}
+                        className={`px-3 py-1.5 text-xs font-mono rounded-lg border transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                          showClearance
+                            ? 'bg-[#C47B52]/20 border-[#C47B52] text-[#EED77A] font-semibold'
+                            : 'bg-white/5 border-white/10 text-[#A5A7A4] hover:text-white'
+                        }`}
+                      >
+                        Door Swings {showClearance ? 'ON' : 'OFF'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
         </Reveal>
       </div>
     </section>

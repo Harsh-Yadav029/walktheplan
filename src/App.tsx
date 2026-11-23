@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { MotionConfig, AnimatePresence, motion } from 'motion/react';
+import { MotionConfig } from 'motion/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useTransitionTo } from './components/PageTransition';
+import { useSmoothScroll } from './components/SmoothScrollProvider';
 import { useRouter } from './lib/router';
+import { PageTransition } from './transitions/PageTransition';
 import { Navbar } from './components/Navbar';
 import { StoryDrawer } from './components/StoryDrawer';
 import { BottomNavBar, type NavItem } from './components/ui/bottom-nav-bar';
@@ -19,14 +20,14 @@ import { ScrollProgress } from './components/ScrollProgress';
 
 export default function App() {
   const router = useRouter();
+  const { scrollTo } = useSmoothScroll();
   const [selectedStudioId, setSelectedStudioId] = useState<string | undefined>(undefined);
   const [selectedPackageId, setSelectedPackageId] = useState<string | undefined>(undefined);
   const [presetNote, setPresetNote] = useState<string | undefined>(undefined);
   const [isStoryDrawerOpen, setIsStoryDrawerOpen] = useState(false);
-  const transitionTo = useTransitionTo();
 
   const scrollToSection = (id: string) => {
-    transitionTo(id);
+    scrollTo(id);
   };
 
   const handleBookService = (packageId: string) => {
@@ -85,6 +86,10 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="min-h-screen bg-[#141516] text-[#F2EDE5] overflow-x-clip w-full max-w-full">
+        {/* Accessible Skip Link */}
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <CustomCursor />
         <ScrollProgress />
         
@@ -105,39 +110,33 @@ export default function App() {
           onOpenChange={setIsStoryDrawerOpen}
         />
 
-        <main className="relative z-10 w-full bg-[#141516] border-b border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={normalizedPath}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full"
-            >
-              {isAboutPage ? (
-                <AboutPage />
-              ) : isServicesPage ? (
-                <ServicesPage />
-              ) : isFranchisePage ? (
-                <FranchisePage />
-              ) : isGalleryPage ? (
-                <GalleryPage />
-              ) : isBlogPage ? (
-                <BlogPage />
-              ) : (
-                <HomePage
-                  onScrollToSection={scrollToSection}
-                  onBookService={handleBookService}
-                  onBookStudio={handleBookStudio}
-                  onBookConfigured={handleBookConfigured}
-                  selectedStudioId={selectedStudioId}
-                  selectedPackageId={selectedPackageId}
-                  presetNote={presetNote}
-                />
-              )}
-            </motion.div>
-          </AnimatePresence>
+        <main
+          id="main-content"
+          className="relative z-10 w-full bg-[#141516] border-b border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+        >
+          <PageTransition pathname={normalizedPath}>
+            {isAboutPage ? (
+              <AboutPage />
+            ) : isServicesPage ? (
+              <ServicesPage />
+            ) : isFranchisePage ? (
+              <FranchisePage />
+            ) : isGalleryPage ? (
+              <GalleryPage />
+            ) : isBlogPage ? (
+              <BlogPage />
+            ) : (
+              <HomePage
+                onScrollToSection={scrollToSection}
+                onBookService={handleBookService}
+                onBookStudio={handleBookStudio}
+                onBookConfigured={handleBookConfigured}
+                selectedStudioId={selectedStudioId}
+                selectedPackageId={selectedPackageId}
+                presetNote={presetNote}
+              />
+            )}
+          </PageTransition>
         </main>
 
         <Footer />

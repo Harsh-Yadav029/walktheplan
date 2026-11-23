@@ -5,11 +5,32 @@ import { ArrowUpRight, Clock, MapPin, Phone, Sparkles } from "lucide-react";
 import { STUDIO_LOCATIONS, buildWhatsAppUrl } from "../lib/bookingLogic";
 import { WorldMap } from "./ui/world-map";
 
-interface StudioLocatorSectionProps {
-  onBookStudio: (studioId: string) => void;
+export interface StudioLocatorSectionProps {
+  onBookStudio?: (studioId: string) => void;
+  tagline?: string;
+  title?: string;
+  description?: string;
+  bookButtonLabel?: (cityName: string) => string;
+  whatsAppMessage?: (cityName: string) => string;
+  className?: string;
+  containerClassName?: string;
+  sectionId?: string;
+  showBorderBottom?: boolean;
 }
 
-export function StudioLocatorSection({ onBookStudio }: StudioLocatorSectionProps) {
+export function StudioLocatorSection({
+  onBookStudio,
+  tagline = "Pan-India Experience Centers",
+  title = "Five Spatial Studios Across India",
+  description = "Select a city to view studio specifications, verified street address, operating hours, and direct appointment scheduling.",
+  bookButtonLabel = (city: string) => `Book ${city} Studio`,
+  whatsAppMessage = (city: string) =>
+    `Hello Walk The Plan, I would like to schedule a walkthrough at the ${city} studio.`,
+  className = "",
+  containerClassName,
+  sectionId = "studios",
+  showBorderBottom = true,
+}: StudioLocatorSectionProps) {
   const [activeStudioId, setActiveStudioId] = useState<string>(STUDIO_LOCATIONS[0].id);
   const activeStudio =
     STUDIO_LOCATIONS.find((s) => s.id === activeStudioId) ?? STUDIO_LOCATIONS[0];
@@ -36,24 +57,25 @@ export function StudioLocatorSection({ onBookStudio }: StudioLocatorSectionProps
 
   return (
     <section
-      id="studios"
-      className="relative w-full py-10 md:py-14 bg-[#141516] text-[#F2EDE5] border-b border-white/10 overflow-hidden select-none"
+      id={sectionId}
+      className={`relative w-full py-10 md:py-14 bg-[#141516] text-[#F2EDE5] ${
+        showBorderBottom ? "border-b border-white/10" : ""
+      } overflow-hidden select-none ${className}`}
     >
-      <div className="mx-auto max-w-[1360px] px-5 sm:px-8 md:px-10">
+      <div className={containerClassName || "mx-auto max-w-[1360px] px-5 sm:px-8 md:px-10"}>
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
           <div className="space-y-4 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C47B52]/15 border border-[#C47B52]/30 text-xs font-mono uppercase tracking-widest text-[#EED77A]">
               <Sparkles className="w-3.5 h-3.5 text-[#C47B52]" />
-              <span>Pan-India Experience Centers</span>
+              <span>{tagline}</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08]">
-              Five Spatial Studios Across India
+              {title}
             </h2>
           </div>
           <p className="text-sm sm:text-base text-[#A5A7A4] max-w-md font-light leading-relaxed">
-            Select a city to view studio specifications, verified street address, operating
-            hours, and direct appointment scheduling.
+            {description}
           </p>
         </div>
 
@@ -203,16 +225,22 @@ export function StudioLocatorSection({ onBookStudio }: StudioLocatorSectionProps
               <div className="flex flex-wrap items-center gap-4 pt-8 border-t border-white/10 mt-8">
                 <button
                   type="button"
-                  onClick={() => onBookStudio(activeStudio.id)}
+                  onClick={() => {
+                    if (onBookStudio) {
+                      onBookStudio(activeStudio.id);
+                    } else {
+                      window.location.hash = "#book";
+                    }
+                  }}
                   className="bg-[#C47B52] hover:bg-[#A85E43] text-white px-7 py-3.5 text-xs font-mono uppercase tracking-wider transition-colors rounded-xl font-semibold shadow-lg shadow-[#C47B52]/20 cursor-pointer whitespace-nowrap shrink-0"
                 >
-                  Book {activeStudio.city} Studio
+                  {bookButtonLabel(activeStudio.city)}
                 </button>
 
                 <a
                   href={buildWhatsAppUrl(
                     "919711022075",
-                    `Hello Walk The Plan, I would like to schedule a walkthrough at the ${activeStudio.city} studio.`
+                    whatsAppMessage(activeStudio.city)
                   )}
                   target="_blank"
                   rel="noopener noreferrer"

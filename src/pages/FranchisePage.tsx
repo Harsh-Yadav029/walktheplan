@@ -6,7 +6,6 @@ import {
   Award,
   ArrowRight,
   CheckCircle2,
-  MapPin,
   Clock,
   Phone,
   ArrowUpRight,
@@ -14,6 +13,7 @@ import {
   Compass,
 } from 'lucide-react';
 import { STUDIO_LOCATIONS, buildWhatsAppUrl, BUSINESS_CONTACT } from '../lib/bookingLogic';
+import { StudioLocatorSection } from '../components/StudioLocatorSection';
 
 interface FranchiseModelDetails {
   modelKey: 'FOFO' | 'FOCO' | 'COLLABORATION';
@@ -89,11 +89,6 @@ export function FranchisePage() {
 
   // Active Franchise Business Model Tab
   const [activeModel, setActiveModel] = useState<'FOFO' | 'FOCO' | 'COLLABORATION'>('FOFO');
-
-  // Active Operating Studio Locator Tab
-  const [activeStudioId, setActiveStudioId] = useState<string>(STUDIO_LOCATIONS[0].id);
-  const activeStudio =
-    STUDIO_LOCATIONS.find((s) => s.id === activeStudioId) ?? STUDIO_LOCATIONS[0];
 
   // Franchise Application Form State
   const [fullName, setFullName] = useState('');
@@ -353,206 +348,23 @@ export function FranchisePage() {
         })()}
       </section>
 
-      {/* 4. STUDIO LOCATOR / NATIONAL FOOTPRINT SECTION (From User's Screenshot 1) */}
-      <section className="px-4 sm:px-8 max-w-7xl mx-auto mb-24 md:mb-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-10">
-          <div className="lg:col-span-7">
-            <span className="text-xs font-mono uppercase tracking-widest text-[#EED77A] block mb-2">
-              Pan-India Studio Network
-            </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-white">
-              Five Spatial Studios Across India
-            </h2>
-          </div>
-          <div className="lg:col-span-5">
-            <p className="text-sm sm:text-base text-[#A5A7A4] leading-relaxed">
-              Explore our operating network of life-size architectural walkthrough centers. Visit an
-              active facility to experience the projection clarity and live customer flow firsthand.
-            </p>
-          </div>
-        </div>
-
-        {/* City Selection Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {STUDIO_LOCATIONS.map((studio) => {
-            const isSelected = studio.id === activeStudioId;
-            return (
-              <button
-                key={studio.id}
-                type="button"
-                onClick={() => setActiveStudioId(studio.id)}
-                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-widest border transition-all cursor-pointer whitespace-nowrap shrink-0 rounded-lg ${
-                  isSelected
-                    ? 'bg-[#EED77A] text-[#191A18] border-[#EED77A] shadow-md'
-                    : 'bg-[#1E2021] text-[#A5A7A4] border-[#2A2D30] hover:text-white hover:border-[#C47B52]'
-                }`}
-              >
-                {studio.city}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Interactive India Map & Active Studio Details Card */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Architectural SVG Map of India (5 Columns) */}
-          <div className="lg:col-span-5 rounded-2xl bg-[#141516] border border-[#2A2D30] p-6 sm:p-8 flex flex-col justify-between min-h-[380px]">
-            <div className="flex items-center justify-between text-xs text-[#A5A7A4] border-b border-white/10 pb-3 font-mono">
-              <span>India Studio Network</span>
-              <span className="text-[#EED77A]">5 Active Locations</span>
-            </div>
-
-            <div className="relative my-6 flex items-center justify-center flex-1">
-              <svg
-                viewBox="0 0 100 100"
-                className="w-full max-w-[280px] h-auto drop-shadow-2xl"
-                aria-label="Interactive map of Walk The Plan India studio cities"
-              >
-                {/* Stylized minimal architectural India silhouette */}
-                <path
-                  d="M42,8 L48,14 L46,20 L55,26 L67,31 L78,34 L82,38 L74,44 L67,44 L63,52 L56,60 L49,73 L45,87 L41,92 L36,83 L33,70 L28,57 L20,48 L18,40 L26,35 L29,26 L36,16 Z"
-                  fill="#1E2021"
-                  stroke="#C47B52"
-                  strokeOpacity="0.4"
-                  strokeWidth="0.8"
-                />
-
-                {/* Subtle architectural grid lines */}
-                <line x1="15" y1="50" x2="85" y2="50" stroke="#FFFFFF" strokeOpacity="0.05" strokeWidth="0.4" />
-                <line x1="50" y1="10" x2="50" y2="92" stroke="#FFFFFF" strokeOpacity="0.05" strokeWidth="0.4" />
-
-                {/* Studio City Pins */}
-                {STUDIO_LOCATIONS.map((studio) => {
-                  const isSelected = studio.id === activeStudioId;
-                  return (
-                    <g
-                      key={studio.id}
-                      className="cursor-pointer"
-                      onClick={() => setActiveStudioId(studio.id)}
-                    >
-                      {/* Pulse Ring for Selected Pin */}
-                      {isSelected && (
-                        <circle
-                          cx={studio.mapCoords.x}
-                          cy={studio.mapCoords.y}
-                          r="5.5"
-                          fill="none"
-                          stroke="#EED77A"
-                          strokeWidth="0.75"
-                          opacity="0.8"
-                          className="animate-ping"
-                        />
-                      )}
-                      {/* Pin Circle */}
-                      <circle
-                        cx={studio.mapCoords.x}
-                        cy={studio.mapCoords.y}
-                        r={isSelected ? 3.2 : 2.2}
-                        fill={isSelected ? '#EED77A' : '#C47B52'}
-                        stroke="#181A1B"
-                        strokeWidth="1"
-                      />
-                      {/* City Label */}
-                      <text
-                        x={studio.mapCoords.x + 4.5}
-                        y={studio.mapCoords.y + 1.2}
-                        fill={isSelected ? '#FFFFFF' : '#A5A7A4'}
-                        fontSize="3.2"
-                        fontFamily="monospace"
-                        fontWeight={isSelected ? 'bold' : 'normal'}
-                      >
-                        {studio.city}
-                      </text>
-                    </g>
-                  );
-                })}
-              </svg>
-            </div>
-
-            <p className="text-[11px] text-[#A5A7A4] text-center font-mono">
-              Click any city pin on the map or tab above to inspect studio specifications.
-            </p>
-          </div>
-
-          {/* Active Studio Card (7 Columns) */}
-          <div className="lg:col-span-7 rounded-2xl bg-[#1E2021] border border-[#2A2D30] p-6 sm:p-8 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
-                <span className="text-xs uppercase font-mono tracking-widest text-[#EED77A]">
-                  {activeStudio.label}
-                </span>
-                <span className="text-xs text-[#A5A7A4] font-mono">
-                  Up to {activeStudio.baySizeSqFt.toLocaleString()} sq.ft. Bay
-                </span>
-              </div>
-
-              <h3 className="text-2xl sm:text-3xl font-serif text-white mb-6">
-                {activeStudio.city} Studio
-              </h3>
-
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-[#C47B52] mt-1 shrink-0" />
-                  <span className="text-sm text-[#F2EDE5]/90 leading-relaxed">
-                    {activeStudio.address}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Clock className="w-4 h-4 text-[#C47B52] shrink-0" />
-                  <span className="text-sm text-[#A5A7A4]">{activeStudio.hours}</span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-[#C47B52] shrink-0" />
-                  <span className="text-sm text-white font-mono">{activeStudio.phone}</span>
-                </div>
-              </div>
-
-              {/* Studio Capabilities */}
-              <div className="mb-8">
-                <span className="text-[11px] font-mono uppercase tracking-widest text-[#A5A7A4] block mb-3">
-                  Studio Capabilities & Amenities
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  {activeStudio.highlights.map((highlight, idx) => (
-                    <span
-                      key={idx}
-                      className="px-3 py-1.5 rounded-lg bg-[#141516] border border-white/10 text-xs text-[#F2EDE5]"
-                    >
-                      {highlight}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Actions Bar */}
-            <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-white/10">
-              <button
-                type="button"
-                onClick={() => router.navigate('/services')}
-                className="px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-[#191A18] bg-[#EED77A] hover:bg-[#F4DF8E] transition-all cursor-pointer shadow-md"
-              >
-                Book {activeStudio.city} Studio
-              </button>
-
-              <a
-                href={buildWhatsAppUrl(
-                  BUSINESS_CONTACT.phoneRaw,
-                  `Hello Walk The Plan coordinator, I would like to visit the ${activeStudio.city} Studio to assess franchise feasibility.`
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider text-white border border-white/15 bg-white/5 hover:bg-white/10 transition-colors inline-flex items-center gap-2"
-              >
-                <span>WhatsApp Coordinator</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[#C47B52]" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 4. STUDIO LOCATOR / NATIONAL FOOTPRINT SECTION */}
+      <StudioLocatorSection
+        sectionId="studios"
+        tagline="Pan-India Studio Network"
+        title="Five Spatial Studios Across India"
+        description="Explore our operating network of life-size architectural walkthrough centers. Visit an active facility to experience the projection clarity and live customer flow firsthand."
+        bookButtonLabel={(cityName) => `Visit ${cityName} Studio`}
+        whatsAppMessage={(cityName) =>
+          `Hello Walk The Plan coordinator, I would like to visit the ${cityName} Studio to assess franchise feasibility.`
+        }
+        onBookStudio={(_studioId) => {
+          router.navigate('/services');
+        }}
+        showBorderBottom={false}
+        className="mb-24 md:mb-32 !py-0 !bg-transparent"
+        containerClassName="max-w-7xl mx-auto px-4 sm:px-8"
+      />
 
       {/* 5. FRANCHISE PROPOSAL & TERRITORY QUALIFICATION FORM (From User's Screenshot 2) */}
       <section id="franchise-form" className="px-4 sm:px-8 max-w-7xl mx-auto mb-24 md:mb-32">

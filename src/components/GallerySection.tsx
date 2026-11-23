@@ -80,7 +80,10 @@ export function GallerySection() {
               <Sparkles className="w-3.5 h-3.5 text-[#C47B52]" />
               <span>Studio &amp; Spatial Gallery</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08]">
+            <h2
+              data-motion-text="lines"
+              className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08]"
+            >
               Inside Walk The Plan Studios
             </h2>
           </div>

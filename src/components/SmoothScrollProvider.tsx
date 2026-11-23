@@ -13,14 +13,16 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+gsap.defaults({ ease: 'power3.out', duration: 0.85 });
 
-interface SmoothScrollContextValue {
+export interface SmoothScrollContextValue {
   scrollTo: (
     target: string | HTMLElement | number,
-    options?: { offset?: number; duration?: number; immediate?: boolean }
+    options?: { offset?: number; duration?: number; immediate?: boolean; force?: boolean }
   ) => void;
   stopScroll: () => void;
   startScroll: () => void;
+  getLenis: () => Lenis | null;
 }
 
 const SmoothScrollContext = createContext<SmoothScrollContextValue>({
@@ -35,6 +37,7 @@ const SmoothScrollContext = createContext<SmoothScrollContextValue>({
   },
   stopScroll: () => {},
   startScroll: () => {},
+  getLenis: () => null,
 });
 
 export function useSmoothScroll() {
@@ -52,6 +55,8 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     if (prefersReducedMotion) {
       return;
     }
+
+    document.documentElement.classList.add('has-motion');
 
     const lenis = new Lenis({
       autoRaf: false,
@@ -93,6 +98,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     window.addEventListener('resize', handleResize);
 
     return () => {
+      document.documentElement.classList.remove('has-motion');
       window.clearTimeout(refreshTimer);
       window.removeEventListener('resize', handleResize);
       gsap.ticker.remove(updateTicker);
@@ -139,13 +145,16 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     lenisRef.current?.start();
   }, []);
 
+  const getLenis = useCallback(() => lenisRef.current, []);
+
   const value = useMemo(
     () => ({
       scrollTo,
       stopScroll,
       startScroll,
+      getLenis,
     }),
-    [scrollTo, stopScroll, startScroll]
+    [scrollTo, stopScroll, startScroll, getLenis]
   );
 
   return (

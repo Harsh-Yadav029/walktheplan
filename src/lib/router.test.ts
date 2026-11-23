@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { STUDIO_GALLERY_ITEMS } from '../data/galleryContent.ts';
+import { MOTION_TOKENS, revealPresets } from './cinematicMotion.ts';
 
 test('router path navigation resolves /, /about, /services, /franchise, /gallery, and /blog correctly', () => {
   const routes = ['/', '/about', '/services', '/franchise', '/gallery', '/blog'];
@@ -190,3 +191,87 @@ test('2026 Stage 01 video asset exists and is integrated into studio gallery car
   assert.equal(siteContent.includes('2026 Stage 01 Laser Grid Experience'), true);
   assert.equal(siteContent.includes('20261120_212746_0000.mp4'), true);
 });
+
+test('cinematic gsap lenis motion system tokens and presets match specification', () => {
+  // Motion Taste and Base Tokens verification
+  assert.equal(MOTION_TOKENS.eases.out, 'power3.out');
+  assert.equal(MOTION_TOKENS.eases.editorial, 'power4.out');
+  assert.equal(MOTION_TOKENS.eases.expo, 'expo.out');
+  assert.equal(MOTION_TOKENS.scrub.cinematic, 1.1);
+  assert.equal(MOTION_TOKENS.hover.duration, 0.45);
+  assert.equal(MOTION_TOKENS.cursorLag.duration, 0.35);
+  assert.equal(MOTION_TOKENS.trigger.start, 'top 82%');
+  assert.equal(MOTION_TOKENS.trigger.anticipatePin, 1);
+  assert.equal(MOTION_TOKENS.stagger.words, 0.055);
+  assert.equal(MOTION_TOKENS.stagger.lines, 0.11);
+  assert.equal(MOTION_TOKENS.stagger.cards, 0.075);
+
+  // Reveal Presets
+  assert.ok(revealPresets['fade-up']);
+  assert.ok(revealPresets['blur-in']);
+  assert.ok(revealPresets['scale']);
+  assert.ok(revealPresets['slide-left']);
+  assert.ok(revealPresets['slide-right']);
+});
+
+test('cinematic css foundation rules and markup selectors exist', () => {
+  const cssPath = path.resolve(process.cwd(), 'src/components/cinematic.css');
+  const cssContent = fs.readFileSync(cssPath, 'utf-8');
+
+  assert.equal(cssContent.includes('html.has-motion [data-motion-text]'), true);
+  assert.equal(cssContent.includes('.motion-line-mask'), true);
+  assert.equal(cssContent.includes('.motion-word-mask'), true);
+  assert.equal(cssContent.includes('[data-image-reveal]'), true);
+  assert.equal(cssContent.includes('[data-parallax-image]'), true);
+  assert.equal(cssContent.includes('[data-cursor]'), true);
+});
+
+test('verified testimonials carousel has valid data and interactive architecture', () => {
+  const testimonialsPath = path.resolve(process.cwd(), 'src/components/TestimonialsSection.tsx');
+  assert.equal(fs.existsSync(testimonialsPath), true);
+  const content = fs.readFileSync(testimonialsPath, 'utf-8');
+
+  assert.equal(content.includes('VERIFIED_TESTIMONIALS'), true);
+  assert.equal(content.includes('AnimatePresence'), true);
+  assert.equal(content.includes('AUTOPLAY_DURATION_MS'), true);
+  assert.equal(content.includes('font-calligraphy'), true);
+  assert.equal(content.includes('font-serif'), true);
+  assert.equal(content.includes('activeTestimonialPill'), true);
+
+  const siteContentPath = path.resolve(process.cwd(), 'src/data/siteContent.ts');
+  const siteContent = fs.readFileSync(siteContentPath, 'utf-8');
+  assert.equal(siteContent.includes('Sapna Aggarwal'), true);
+  assert.equal(siteContent.includes('Parth Khanna'), true);
+  assert.equal(siteContent.includes('Himanshu Makkar'), true);
+  assert.equal(siteContent.includes('Sanya Khanna'), true);
+  assert.equal(siteContent.includes('Er. Rajesh Varma'), true);
+});
+
+test('tailwind image accordion component and leadership section are verified', () => {
+  const accordionPath = path.resolve(process.cwd(), 'src/components/ui/tailwind-image-accordion.tsx');
+  assert.equal(fs.existsSync(accordionPath), true);
+  const accordionContent = fs.readFileSync(accordionPath, 'utf-8');
+
+  assert.equal(accordionContent.includes('TailwindImageAccordion'), true);
+  assert.equal(accordionContent.includes('LEADERSHIP_ITEMS'), true);
+  assert.equal(accordionContent.includes('/images/studio/parth_khanna.png'), true);
+  assert.equal(accordionContent.includes('/images/studio/himanshu_makkar.png'), true);
+  assert.equal(accordionContent.includes('/images/studio/sanya_khanna.jpg'), true);
+
+  // Verify physical image files exist
+  assert.equal(fs.existsSync(path.resolve(process.cwd(), 'public/images/studio/parth_khanna.png')), true);
+  assert.equal(fs.existsSync(path.resolve(process.cwd(), 'public/images/studio/himanshu_makkar.png')), true);
+  assert.equal(fs.existsSync(path.resolve(process.cwd(), 'public/images/studio/sanya_khanna.jpg')), true);
+
+  // Verify AboutPage integration
+  const aboutPath = path.resolve(process.cwd(), 'src/pages/AboutPage.tsx');
+  const aboutContent = fs.readFileSync(aboutPath, 'utf-8');
+  assert.equal(aboutContent.includes('TailwindImageAccordion'), true);
+  assert.equal(aboutContent.includes('selectedLeaderId'), true);
+  assert.equal(aboutContent.includes('parth_khanna.png'), true);
+  assert.equal(aboutContent.includes('himanshu_makkar.png'), true);
+  assert.equal(aboutContent.includes('sanya_khanna.jpg'), true);
+});
+
+
+

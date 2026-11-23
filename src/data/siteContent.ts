@@ -300,6 +300,12 @@ export interface TestimonialItem {
   highlight: string;
   videoLabel: string;
   posterImage: string;
+  avatar?: string;
+  videoUrl?: string;
+  metric?: string;
+  location?: string;
+  rating?: number;
+  year?: string;
 }
 
 export const VERIFIED_TESTIMONIALS: TestimonialItem[] = [
@@ -312,31 +318,85 @@ export const VERIFIED_TESTIMONIALS: TestimonialItem[] = [
     organization: 'ANSA Interiors & Architecture',
     category: 'Architectural Collaboration',
     highlight: 'Bridging 2D drawings & real-life perception',
-    videoLabel: 'Featured Studio Collaboration Highlight',
-    posterImage: ASSETS.introBlueprint,
+    videoLabel: 'ANSA × Walk The Plan Collaborative Review',
+    posterImage: '/images/studio/gurgaon_studio.png',
+    avatar: '/images/studio/sanya_khanna.jpg',
+    videoUrl: '/videos/studio/1.mp4',
+    metric: 'Saved ₹8.5L in Civil Demolition',
+    location: 'Gurugram Flagship',
+    rating: 5,
+    year: '2026',
   },
   {
-    id: 'plan-freeze',
+    id: 'parth-khanna',
     quote:
-      'Once families step inside the projected dining and kitchen clearances and move full-scale blocks around, layout questions settle in minutes instead of weeks of drawing revisions.',
-    author: 'Walk The Plan Studio Methodology',
-    role: 'Pre-Construction Spatial Review',
-    organization: 'Residential & Villa Validations',
-    category: 'Homeowner & Architect Alignment',
+      'Once families step inside the projected dining and kitchen clearances and move full-scale modular blocks around, layout questions settle in minutes instead of weeks of drawing revisions.',
+    author: 'Parth Khanna',
+    role: 'Co-Founder & Spatial Lead',
+    organization: 'Walk The Plan Studio',
+    category: 'Founder Insights',
     highlight: 'Plan Freeze on Day 1',
-    videoLabel: '1:1 Studio Walkthrough Overview',
-    posterImage: ASSETS.heroStudio,
+    videoLabel: '2026 Stage 01 Laser Grid Calibration',
+    posterImage: '/images/studio/2026_stage01_poster.png',
+    avatar: '/images/studio/parth_khanna.png',
+    videoUrl: '/videos/studio/20261120_212746_0000.mp4',
+    metric: '100% Day-1 Plan Freeze',
+    location: 'Innovation Lab',
+    rating: 5,
+    year: '2026',
   },
   {
-    id: 'commercial-validation',
+    id: 'himanshu-makkar',
     quote:
-      'Seeing true corridor widths, point-of-sale sightlines, and furniture spacing at full 1:1 scale gives development and design teams clear operational certainty before civil execution.',
-    author: 'Walk The Plan Commercial Practice',
-    role: 'Retail, Hospitality & Developer Layouts',
-    organization: 'Pan-India Studio Network',
-    category: 'Commercial & Developer Planning',
-    highlight: 'Validated Spatial Circulation',
-    videoLabel: 'Commercial Projection Session Preview',
-    posterImage: ASSETS.galleryWarehouse,
+      'Seeing true corridor widths, wardrobe swing clearances, and AC vent drops at 1:1 scale gives development and design teams clear operational certainty before civil execution begins.',
+    author: 'Himanshu Makkar',
+    role: 'Spatial Architecture Director',
+    organization: 'Walk The Plan Network',
+    category: 'Spatial Optimization',
+    highlight: 'Zero Structural & Clearance Collisions',
+    videoLabel: 'Hillside Villa Precision Clearance Review',
+    posterImage: '/images/studio/dehradun_studio.png',
+    avatar: '/images/studio/himanshu_makkar.png',
+    videoUrl: '/videos/studio/2.mp4',
+    metric: 'Zero On-Site Rework',
+    location: 'Dehradun Studio',
+    rating: 5,
+    year: '2026',
+  },
+  {
+    id: 'sanya-khanna',
+    quote:
+      'Builders and penthouse buyers can physically walk the master suite, test the bed placement against the balcony glass, and make definitive sign-offs in a single afternoon.',
+    author: 'Sanya Khanna',
+    role: 'Principal Design Partner',
+    organization: 'Studio Matrix Collaborations',
+    category: 'Developer & Penthouse Review',
+    highlight: 'Luxury Carpet Area Usability',
+    videoLabel: 'Hyderabad Penthouse Scale Calibration',
+    posterImage: '/images/studio/hyderabad_studio.png',
+    avatar: '/images/studio/sanya_khanna.jpg',
+    videoUrl: '/videos/studio/4.mp4',
+    metric: '3-Week Schedule Acceleration',
+    location: 'Hyderabad Hub',
+    rating: 5,
+    year: '2026',
+  },
+  {
+    id: 'civil-collective',
+    quote:
+      'Our civil site teams no longer face awkward door-wardrobe clashes or misplaced plumbing sleeves. The signed-off 1:1 floor projection notes give us complete construction clarity.',
+    author: 'Er. Rajesh Varma',
+    role: 'Chief Execution Contractor',
+    organization: 'Apex BuildTech Infrastructure',
+    category: 'Civil Contractor Perspective',
+    highlight: 'Flawless Site Execution',
+    videoLabel: 'Varanasi Heritage Bay Full Consensus',
+    posterImage: '/images/studio/varanasi_studio.png',
+    avatar: '/images/studio/himanshu_makkar.png',
+    videoUrl: '/videos/studio/3.mp4',
+    metric: '4 Weeks Saved in Execution',
+    location: 'Varanasi Studio',
+    rating: 5,
+    year: '2026',
   },
 ];

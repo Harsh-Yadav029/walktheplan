@@ -75,23 +75,31 @@ export function ExperienceComparisonSection() {
               <Sparkles className="w-3.5 h-3.5 text-[#C47B52]" />
               <span>Studio Experience • Core Capabilities</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08]">
+            <h2
+              data-motion-text="lines"
+              className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08]"
+            >
               Step Into Every Dimension Before Masonry Starts
             </h2>
           </div>
-          <p className="text-sm sm:text-base text-[#A5A7A4] max-w-md font-light leading-relaxed">
+          <p
+            data-reveal="fade-up"
+            data-reveal-delay="0.1"
+            className="text-sm sm:text-base text-[#A5A7A4] max-w-md font-light leading-relaxed"
+          >
             From your AutoCAD file to our laser-calibrated bay floor, we turn abstract 2D drawings into
             a physical, walkable rehearsal of your future space.
           </p>
         </div>
 
         {/* 4 Physical Capabilities Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div data-reveal-group className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {capabilities.map((cap) => {
             const Icon = cap.icon;
             return (
               <div
                 key={cap.number}
+                data-reveal-item
                 className="group relative rounded-2xl bg-[#181A1B] border border-white/10 p-6 md:p-7 flex flex-col justify-between transition-all duration-300 hover:border-[#C47B52]/50 hover:bg-[#1E2021] hover:-translate-y-1 shadow-xl"
               >
                 <div className="space-y-4">

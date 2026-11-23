@@ -131,16 +131,16 @@ export function MagneticButton({
         returnTween = gsap.to(btn, {
           x: 0,
           y: 0,
-          duration: 0.65,
-          ease: 'elastic.out(1, 0.45)',
+          duration: 0.45,
+          ease: 'power3.out',
         });
 
         if (inner) {
           innerReturnTween = gsap.to(inner, {
             x: 0,
             y: 0,
-            duration: 0.65,
-            ease: 'elastic.out(1, 0.45)',
+            duration: 0.45,
+            ease: 'power3.out',
           });
         }
       };
@@ -222,3 +222,93 @@ export function ImageWithFallback({
     </div>
   );
 }
+
+/* ==========================================================================
+   CINEMATIC GSAP LENIS MOTION WRAPPERS
+   Declarative markup components matching the specification
+   ========================================================================== */
+
+export interface CinematicTextProps {
+  children: ReactNode;
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'span' | 'div';
+  variant?: 'words' | 'lines';
+  className?: string;
+}
+
+export function CinematicText({
+  children,
+  as: Tag = 'div',
+  variant = 'words',
+  className = '',
+}: CinematicTextProps) {
+  return (
+    <Tag data-motion-text={variant} className={className}>
+      {children}
+    </Tag>
+  );
+}
+
+export interface CinematicRevealProps {
+  children: ReactNode;
+  preset?: 'fade-up' | 'blur-in' | 'scale' | 'slide-left' | 'slide-right';
+  delay?: number;
+  asItem?: boolean;
+  className?: string;
+}
+
+export function CinematicReveal({
+  children,
+  preset = 'fade-up',
+  delay,
+  asItem = false,
+  className = '',
+}: CinematicRevealProps) {
+  return (
+    <div
+      data-reveal={preset}
+      {...(asItem ? { 'data-reveal-item': true } : {})}
+      {...(delay ? { 'data-reveal-delay': delay } : {})}
+      className={className}
+    >
+      {children}
+    </div>
+  );
+}
+
+export interface CinematicRevealGroupProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function CinematicRevealGroup({ children, className = '' }: CinematicRevealGroupProps) {
+  return (
+    <div data-reveal-group className={className}>
+      {children}
+    </div>
+  );
+}
+
+export interface CinematicMagneticProps {
+  children: ReactNode;
+  strength?: number;
+  cursorLabel?: string;
+  className?: string;
+}
+
+export function CinematicMagnetic({
+  children,
+  strength = 0.18,
+  cursorLabel,
+  className = '',
+}: CinematicMagneticProps) {
+  return (
+    <div
+      data-magnetic={strength}
+      {...(cursorLabel ? { 'data-cursor-label': cursorLabel } : {})}
+      className={`inline-block ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+

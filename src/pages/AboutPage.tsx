@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from '../lib/router';
 import { StoryDrawer } from '../components/StoryDrawer';
+import TailwindImageAccordion, { LEADERSHIP_ITEMS } from '../components/ui/tailwind-image-accordion';
 import {
   Sparkles,
   ArrowRight,
@@ -19,6 +20,7 @@ export function AboutPage() {
   const router = useRouter();
   const [isStoryDrawerOpen, setIsStoryDrawerOpen] = useState(false);
   const [selectedDrawerChapter, setSelectedDrawerChapter] = useState(0);
+  const [selectedLeaderId, setSelectedLeaderId] = useState<string>('parth-khanna');
 
   const openDrawerWithChapter = (chapterIdx: number) => {
     setSelectedDrawerChapter(chapterIdx);
@@ -228,127 +230,176 @@ export function AboutPage() {
       </section>
 
       {/* Leadership Biographies Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-24">
+      <section id="leadership" className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-16">
         <div className="text-center space-y-3">
-          <span className="text-xs font-mono text-[#C47B52] uppercase tracking-widest">
-            Leadership & Architectural Guidance
+          <span className="font-calligraphy text-3xl sm:text-4xl text-[#EED77A] tracking-wide block mb-1">
+            The Visionaries
           </span>
-          <h2 className="text-3xl sm:text-5xl font-serif font-bold text-[#F5F2EB]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C47B52]/15 border border-[#C47B52]/30 text-xs font-mono uppercase tracking-widest text-[#EED77A]">
+            <Sparkles className="w-3.5 h-3.5 text-[#C47B52]" />
+            <span>Leadership &amp; Architectural Guidance</span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#F5F2EB] tracking-tight">
             The Minds Behind The Blueprint
           </h2>
-          <p className="text-sm text-[#A5A7A4] max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-[#A5A7A4] max-w-2xl mx-auto">
             Combining architectural design vision, civil execution rigor, and strategic interior mastery.
           </p>
         </div>
 
-        {/* 1. Parth Khanna */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start p-8 sm:p-10 rounded-3xl bg-[#181A1B] border border-white/5">
-          <div className="lg:col-span-4 space-y-4">
-            <div className="w-24 h-24 rounded-2xl bg-gradient-to-tr from-[#C47B52] to-[#EED77A] flex items-center justify-center font-serif text-3xl font-bold text-[#141516] shadow-md">
-              PK
-            </div>
-            <div>
-              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white">
-                Parth <span className="text-[#C47B52]">Khanna</span>
-              </h3>
-              <p className="text-sm text-[#C47B52] font-medium mt-0.5">Founder & Director</p>
-              <p className="text-xs text-[#A5A7A4] font-mono mt-1">B.Arch • 8+ Years Experience</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#141516] border-l-2 border-[#C47B52]">
-              <p className="text-xs sm:text-sm italic text-white/90">
-                "Making it possible to walk through your future home before construction begins."
-              </p>
-            </div>
-          </div>
-          <div className="lg:col-span-8 space-y-4 text-xs sm:text-sm text-[#D2D3D0] leading-relaxed">
-            <p>
-              Every meaningful innovation begins with an observation. As a <strong>Bachelor of Architecture</strong> with over <strong>8 years of professional experience</strong> across residential homes, luxury villas, commercial developments, and a wide range of architectural projects, I wasn't just designing buildings—I was understanding people.
-            </p>
-            <p className="text-white font-serif font-bold text-base italic border-l-2 border-[#EED77A] pl-4 py-1">
-              "Architects could visualize the design. Clients often couldn't."
-            </p>
-            <p>
-              Despite detailed floor plans, elevations, and 3D renders, homeowners still struggled to truly understand how their future home would feel once it was built. This communication gap between architectural imagination and client understanding frequently resulted in uncertainty, design revisions, delayed decisions, and avoidable costs.
-            </p>
-            <p>
-              Walk The Plan has earned the trust of homeowners, architects, builders, and industry leaders who believe that the future of construction begins long before execution. Renowned professionals, including <strong>Sumit Dhawan</strong> and <strong>Ridhi Khosla</strong>, have experienced our platform firsthand, further reinforcing our belief that immersive planning is not just an innovation—it is the future of the construction industry.
-            </p>
-            <div className="pt-2 font-semibold text-[#EED77A]">
-              "The best construction decisions are made before construction begins."
-            </div>
-          </div>
-        </div>
+        {/* Interactive Image Accordion */}
+        <TailwindImageAccordion
+          activeId={selectedLeaderId}
+          onSelect={(item) => setSelectedLeaderId(item.id)}
+        />
 
-        {/* 2. Himanshu Makkar */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start p-8 sm:p-10 rounded-3xl bg-[#181A1B] border border-white/5">
-          <div className="lg:col-span-4 space-y-4">
-            <div className="w-24 h-24 rounded-2xl bg-gradient-to-tr from-[#383B3D] to-[#C47B52] flex items-center justify-center font-serif text-3xl font-bold text-[#EED77A] shadow-md">
-              HM
+        {/* Detailed Leader Profiles */}
+        <div className="space-y-12 pt-4">
+          {/* 1. Parth Khanna */}
+          <div
+            id="parth-khanna"
+            className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-start p-8 sm:p-10 rounded-3xl bg-[#181A1B] border transition-all duration-300 ${
+              selectedLeaderId === 'parth-khanna'
+                ? 'border-[#C47B52] shadow-[0_20px_50px_-15px_rgba(196,123,82,0.25)] ring-1 ring-[#C47B52]/50'
+                : 'border-white/5 opacity-85 hover:opacity-100 hover:border-white/15'
+            }`}
+          >
+            <div className="lg:col-span-4 space-y-4">
+              <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-[#C47B52] shadow-xl p-0.5 bg-gradient-to-tr from-[#C47B52] to-[#EED77A]">
+                <img
+                  src="/images/studio/parth_khanna.png"
+                  alt="Parth Khanna"
+                  className="w-full h-full object-cover object-top rounded-2xl"
+                />
+              </div>
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white">
+                  Parth <span className="text-[#C47B52]">Khanna</span>
+                </h3>
+                <p className="text-sm text-[#C47B52] font-medium mt-0.5">Founder &amp; Director</p>
+                <p className="text-xs text-[#A5A7A4] font-mono mt-1">B.Arch • 8+ Years Experience</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-[#141516] border-l-2 border-[#C47B52]">
+                <p className="text-xs sm:text-sm italic text-white/90">
+                  &ldquo;Making it possible to walk through your future home before construction begins.&rdquo;
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white">
-                Himanshu <span className="text-[#C47B52]">Makkar</span>
-              </h3>
-              <p className="text-sm text-[#C47B52] font-medium mt-0.5">Director</p>
-              <p className="text-xs text-[#A5A7A4] font-mono mt-1">Civil Execution • 8+ Years Experience</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#141516] border-l-2 border-[#C47B52]">
-              <p className="text-xs sm:text-sm italic text-white/90">
-                "Making every construction journey clearer before the first brick is laid."
+            <div className="lg:col-span-8 space-y-4 text-xs sm:text-sm text-[#D2D3D0] leading-relaxed">
+              <p>
+                Every meaningful innovation begins with an observation. As a <strong>Bachelor of Architecture</strong> with over <strong>8 years of professional experience</strong> across residential homes, luxury villas, commercial developments, and a wide range of architectural projects, I wasn't just designing buildings—I was understanding people.
               </p>
+              <p className="text-white font-serif font-bold text-base sm:text-lg italic border-l-2 border-[#EED77A] pl-4 py-1 text-[#EED77A]">
+                &ldquo;Architects could visualize the design. Clients often couldn't.&rdquo;
+              </p>
+              <p>
+                Despite detailed floor plans, elevations, and 3D renders, homeowners still struggled to truly understand how their future home would feel once it was built. This communication gap between architectural imagination and client understanding frequently resulted in uncertainty, design revisions, delayed decisions, and avoidable costs.
+              </p>
+              <p>
+                Walk The Plan has earned the trust of homeowners, architects, builders, and industry leaders who believe that the future of construction begins long before execution. Renowned professionals, including <strong>Sumit Dhawan</strong> and <strong>Ridhi Khosla</strong>, have experienced our platform firsthand, further reinforcing our belief that immersive planning is not just an innovation—it is the future of the construction industry.
+              </p>
+              <div className="pt-2 font-mono text-xs sm:text-sm text-[#EED77A] font-semibold flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#C47B52]" />
+                <span>&ldquo;The best construction decisions are made before construction begins.&rdquo;</span>
+              </div>
             </div>
           </div>
-          <div className="lg:col-span-8 space-y-4 text-xs sm:text-sm text-[#D2D3D0] leading-relaxed">
-            <p>
-              Great construction is never defined by beautiful drawings alone. It is defined by what actually gets built on-site. Coming from a family deeply rooted in the construction industry and backed by over <strong>8 years of hands-on experience</strong> in construction execution, I have spent my career where projects truly come to life—on construction sites.
-            </p>
-            <p className="text-white font-serif font-bold text-base italic border-l-2 border-[#EED77A] pl-4 py-1">
-              "Many homeowners approved designs without fully understanding how their spaces would actually look and function after construction."
-            </p>
-            <p>
-              Somewhere between design and execution, expectations often changed. This resulted in unnecessary revisions, additional costs, project delays, material wastage, and avoidable stress. Giving homeowners the opportunity to experience their future spaces before construction begins creates something invaluable: confidence.
-            </p>
-            <div className="pt-2 font-semibold text-[#EED77A]">
-              "Every successful project is built twice—first through thoughtful planning, and then through flawless execution."
-            </div>
-          </div>
-        </div>
 
-        {/* 3. Sanya Chawla Khanna */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start p-8 sm:p-10 rounded-3xl bg-[#181A1B] border border-white/5">
-          <div className="lg:col-span-4 space-y-4">
-            <div className="w-24 h-24 rounded-2xl bg-gradient-to-tr from-[#EED77A] to-[#C47B52] flex items-center justify-center font-serif text-3xl font-bold text-[#141516] shadow-md">
-              SK
+          {/* 2. Sanya Chawla Khanna */}
+          <div
+            id="sanya-khanna"
+            className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-start p-8 sm:p-10 rounded-3xl bg-[#181A1B] border transition-all duration-300 ${
+              selectedLeaderId === 'sanya-khanna'
+                ? 'border-[#C47B52] shadow-[0_20px_50px_-15px_rgba(196,123,82,0.25)] ring-1 ring-[#C47B52]/50'
+                : 'border-white/5 opacity-85 hover:opacity-100 hover:border-white/15'
+            }`}
+          >
+            <div className="lg:col-span-4 space-y-4">
+              <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-[#C47B52] shadow-xl p-0.5 bg-gradient-to-tr from-[#EED77A] to-[#C47B52]">
+                <img
+                  src="/images/studio/sanya_khanna.jpg"
+                  alt="Sanya Chawla Khanna"
+                  className="w-full h-full object-cover object-top rounded-2xl"
+                />
+              </div>
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white">
+                  Sanya Chawla <span className="text-[#C47B52]">Khanna</span>
+                </h3>
+                <p className="text-sm text-[#C47B52] font-medium mt-0.5">
+                  Director &amp; Co-Founder, Studio Symmetry
+                </p>
+                <p className="text-xs text-[#A5A7A4] font-mono mt-1">
+                  Architect • Strategic Backbone of Walk The Plan
+                </p>
+              </div>
+              <div className="p-4 rounded-2xl bg-[#141516] border-l-2 border-[#C47B52]">
+                <p className="text-xs sm:text-sm italic text-white/90">
+                  &ldquo;Every great home begins with a vision, and every vision deserves to be experienced before it is built.&rdquo;
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white">
-                Sanya Chawla <span className="text-[#C47B52]">Khanna</span>
-              </h3>
-              <p className="text-sm text-[#C47B52] font-medium mt-0.5">
-                Director & Co-Founder, Studio Symmetry
+            <div className="lg:col-span-8 space-y-4 text-xs sm:text-sm text-[#D2D3D0] leading-relaxed">
+              <p>
+                Sanya Khanna is a highly accomplished Architect, Interior Design Consultant, and Design Strategist with over <strong>8 years of professional experience</strong>. After completing her Bachelor of Architecture (B.Arch.), she co-founded <strong>Studio Symmetry</strong>, successfully leading residential, commercial, and interior architecture.
               </p>
-              <p className="text-xs text-[#A5A7A4] font-mono mt-1">
-                Architect • Strategic Backbone of Walk The Plan
+              <div className="p-4 rounded-2xl bg-[#141516] border border-[#C47B52]/20 italic text-white/95">
+                &ldquo;One experience that continues to inspire her involved a young child joyfully exploring every room of his future home during a walkthrough, while his grandfather—who had waited decades to build his dream house—experienced the overwhelming happiness of seeing that dream come to life before construction had even begun.&rdquo;
+              </div>
+              <p>
+                Driven by innovation, creativity, and a deep commitment to improving the home-building journey, Sanya continues to contribute towards making Walk The Plan a benchmark for excellence in the architecture and construction industry.
               </p>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#141516] border-l-2 border-[#C47B52]">
-              <p className="text-xs sm:text-sm italic text-white/90">
-                "Every great home begins with a vision, and every vision deserves to be experienced before it is built."
-              </p>
+              <div className="pt-2 font-mono text-xs sm:text-sm text-[#EED77A] font-semibold flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#C47B52]" />
+                <span>&ldquo;Never stop dreaming. Never stop building.&rdquo;</span>
+              </div>
             </div>
           </div>
-          <div className="lg:col-span-8 space-y-4 text-xs sm:text-sm text-[#D2D3D0] leading-relaxed">
-            <p>
-              Sanya Khanna is a highly accomplished Architect, Interior Design Consultant, and Design Strategist with over <strong>8 years of professional experience</strong>. After completing her Bachelor of Architecture (B.Arch.), she co-founded <strong>Studio Symmetry</strong>, successfully leading residential, commercial, and interior architecture.
-            </p>
-            <div className="p-4 rounded-2xl bg-[#141516] border border-[#C47B52]/20 italic text-white/95">
-              "One experience that continues to inspire her involved a young child joyfully exploring every room of his future home during a walkthrough, while his grandfather—who had waited decades to build his dream house—experienced the overwhelming happiness of seeing that dream come to life before construction had even begun."
+
+          {/* 3. Himanshu Makkar */}
+          <div
+            id="himanshu-makkar"
+            className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-start p-8 sm:p-10 rounded-3xl bg-[#181A1B] border transition-all duration-300 ${
+              selectedLeaderId === 'himanshu-makkar'
+                ? 'border-[#C47B52] shadow-[0_20px_50px_-15px_rgba(196,123,82,0.25)] ring-1 ring-[#C47B52]/50'
+                : 'border-white/5 opacity-85 hover:opacity-100 hover:border-white/15'
+            }`}
+          >
+            <div className="lg:col-span-4 space-y-4">
+              <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-[#C47B52] shadow-xl p-0.5 bg-gradient-to-tr from-[#383B3D] to-[#C47B52]">
+                <img
+                  src="/images/studio/himanshu_makkar.png"
+                  alt="Himanshu Makkar"
+                  className="w-full h-full object-cover object-top rounded-2xl"
+                />
+              </div>
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white">
+                  Himanshu <span className="text-[#C47B52]">Makkar</span>
+                </h3>
+                <p className="text-sm text-[#C47B52] font-medium mt-0.5">Director</p>
+                <p className="text-xs text-[#A5A7A4] font-mono mt-1">Civil Execution • 8+ Years Experience</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-[#141516] border-l-2 border-[#C47B52]">
+                <p className="text-xs sm:text-sm italic text-white/90">
+                  &ldquo;Making every construction journey clearer before the first brick is laid.&rdquo;
+                </p>
+              </div>
             </div>
-            <p>
-              Driven by innovation, creativity, and a deep commitment to improving the home-building journey, Sanya continues to contribute towards making Walk The Plan a benchmark for excellence in the architecture and construction industry.
-            </p>
-            <div className="pt-2 font-semibold text-[#EED77A]">
-              "Never stop dreaming. Never stop building."
+            <div className="lg:col-span-8 space-y-4 text-xs sm:text-sm text-[#D2D3D0] leading-relaxed">
+              <p>
+                Great construction is never defined by beautiful drawings alone. It is defined by what actually gets built on-site. Coming from a family deeply rooted in the construction industry and backed by over <strong>8 years of hands-on experience</strong> in construction execution, I have spent my career where projects truly come to life—on construction sites.
+              </p>
+              <p className="text-white font-serif font-bold text-base sm:text-lg italic border-l-2 border-[#EED77A] pl-4 py-1 text-[#EED77A]">
+                &ldquo;Many homeowners approved designs without fully understanding how their spaces would actually look and function after construction.&rdquo;
+              </p>
+              <p>
+                Somewhere between design and execution, expectations often changed. This resulted in unnecessary revisions, additional costs, project delays, material wastage, and avoidable stress. Giving homeowners the opportunity to experience their future spaces before construction begins creates something invaluable: confidence.
+              </p>
+              <div className="pt-2 font-mono text-xs sm:text-sm text-[#EED77A] font-semibold flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#C47B52]" />
+                <span>&ldquo;Every successful project is built twice—first through thoughtful planning, and then through flawless execution.&rdquo;</span>
+              </div>
             </div>
           </div>
         </div>

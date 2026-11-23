@@ -392,11 +392,16 @@ export function Noir3DHero({
               </div>
 
               <h1
+                data-motion-text="lines"
                 className="font-bold tracking-tight text-[#EFEEF0] leading-[1.08]"
                 style={{ fontSize: "clamp(2rem, 3.5vw, 53px)" }}
               >
-                Precision 2D Vectors Morph to{" "}
-                <span className="text-[#FF98A2]">1:1 Scale</span>
+                <span className="motion-line-mask block overflow-hidden">
+                  <span className="motion-line inline-block">Precision 2D Vectors Morph to</span>
+                </span>
+                <span className="motion-line-mask block overflow-hidden">
+                  <span className="motion-line inline-block text-[#FF98A2]">1:1 Scale</span>
+                </span>
               </h1>
 
               <p className="text-sm sm:text-base text-[#EFEEF0]/80 font-normal leading-relaxed">

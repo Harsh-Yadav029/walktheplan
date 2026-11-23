@@ -1,5 +1,10 @@
-import { memo } from 'react';
-import { Noir3DHero } from '../components/ui/noir-3d-hero';
+import { memo, useRef, useState, useEffect } from 'react';
+import { useCinematicMotion } from '../lib/cinematicMotion';
+import { Hero } from '../components/Hero';
+import { Loader } from '../components/Loader';
+import { useFramePreloader } from '../hooks/useFramePreloader';
+import { useSmoothScroll } from '../components/SmoothScrollProvider';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { HomeTestDriveSection } from '../components/HomeTestDriveSection';
 import { ExperienceComparisonSection } from '../components/ExperienceComparisonSection';
 import { SpatialConfigurator } from '../components/SpatialConfigurator';
@@ -24,6 +29,22 @@ interface HomePageProps {
   presetNote?: string;
 }
 
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  });
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onChange = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  return reduced;
+}
+
 export const HomePage = memo(function HomePage({
   onScrollToSection,
   onBookService,
@@ -33,12 +54,45 @@ export const HomePage = memo(function HomePage({
   selectedPackageId,
   presetNote,
 }: HomePageProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  useCinematicMotion(containerRef);
+
+  const reducedMotion = usePrefersReducedMotion();
+  const preloader = useFramePreloader(reducedMotion);
+  const { scrollTo } = useSmoothScroll();
+
+  // Refresh ScrollTrigger once frames unlock and below-hero sections calculate their offsets
+  useEffect(() => {
+    if (!preloader.isReady) return;
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
+    const timer = setTimeout(() => ScrollTrigger.refresh(), 150);
+    return () => {
+      cancelAnimationFrame(id);
+      clearTimeout(timer);
+    };
+  }, [preloader.isReady]);
+
   return (
-    <div className="relative w-full luxury-dark-mode bg-[#141516] text-[#F2EDE5] overflow-x-clip selection:bg-[#C47B52] selection:text-white">
-      {/* 1. Cinematic 3D Zoom-In Hero (Lenis Noir Pink System) */}
-      <Noir3DHero
-        onBookClick={() => onScrollToSection('#book')}
-        onExploreClick={() => onScrollToSection('#experience')}
+    <div
+      ref={containerRef}
+      className="relative w-full luxury-dark-mode bg-[#141516] text-[#F2EDE5] overflow-x-clip selection:bg-[#C47B52] selection:text-white"
+    >
+      {/* 0. Minimal Quiet-Luxury Preloader */}
+      <Loader visible={!preloader.isReady} progressPct={preloader.initialProgressPct} />
+
+      {/* 1. Cinematic 180-Frame Scroll-Scrubbed Architectural Hero */}
+      <Hero
+        framesRef={preloader.framesRef}
+        loadVersion={preloader.loadVersion}
+        reducedMotion={reducedMotion}
+        onHeroPassedChange={(passed) => {
+          window.dispatchEvent(
+            new CustomEvent('wtp-hero-passed', { detail: { passed } })
+          );
+        }}
+        onBookWalkthrough={() => onScrollToSection('#book')}
+        onViewProjects={() => onScrollToSection('#gallery')}
+        onScrollToY={(targetY) => scrollTo(targetY)}
       />
 
       {/* 2. India's #1 Home Test Drive Video Showcase */}

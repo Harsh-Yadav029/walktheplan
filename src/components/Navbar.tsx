@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSmoothScroll } from './SmoothScrollProvider';
-import { useTransitionTo } from './PageTransition';
 import { useRouter } from '../lib/router';
 import { InteractiveHoverLinks } from './ui/interactive-hover-links';
 import { BottomNavBar, type NavItem } from './ui/bottom-nav-bar';
@@ -90,8 +89,7 @@ export function Navbar({ onBookClick, onOpenStoryDrawer }: NavbarProps) {
   const [heroProgress, setHeroProgress] = useState(0);
   const [inHero, setInHero] = useState(true);
 
-  const { stopScroll, startScroll } = useSmoothScroll();
-  const scrollTo = useTransitionTo();
+  const { scrollTo, stopScroll, startScroll } = useSmoothScroll();
   const router = useRouter();
 
   const normalizedPath = router.pathname.replace(/\/$/, '') || '/';
@@ -169,11 +167,20 @@ export function Navbar({ onBookClick, onOpenStoryDrawer }: NavbarProps) {
       setInHero(y < window.innerHeight * 3.5);
     };
 
+    const handleHeroPassed = (e: Event) => {
+      const customEvent = e as CustomEvent<{ passed: boolean }>;
+      if (typeof customEvent.detail?.passed === 'boolean') {
+        setInHero(!customEvent.detail.passed);
+      }
+    };
+
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('wtp-hero-passed', handleHeroPassed);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('wtp-hero-passed', handleHeroPassed);
     };
   }, [isDarkPage]);
 

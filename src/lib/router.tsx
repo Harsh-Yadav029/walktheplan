@@ -1,15 +1,19 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 
 interface RouterContextType {
   pathname: string;
   hash: string;
   navigate: (to: string) => void;
+  isTransitioning: boolean;
+  setTransitioning: (transitioning: boolean) => void;
 }
 
 const RouterContext = createContext<RouterContextType>({
   pathname: typeof window !== 'undefined' ? window.location.pathname : '/',
   hash: typeof window !== 'undefined' ? window.location.hash : '',
   navigate: () => {},
+  isTransitioning: false,
+  setTransitioning: () => {},
 });
 
 export function RouterProvider({ children }: { children: React.ReactNode }) {
@@ -19,6 +23,17 @@ export function RouterProvider({ children }: { children: React.ReactNode }) {
   const [hash, setHash] = useState<string>(
     typeof window !== 'undefined' ? window.location.hash : ''
   );
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+  const isTransitioningRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    isTransitioningRef.current = isTransitioning;
+  }, [isTransitioning]);
+
+  const setTransitioning = useCallback((transitioning: boolean) => {
+    isTransitioningRef.current = transitioning;
+    setIsTransitioning(transitioning);
+  }, []);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -32,6 +47,11 @@ export function RouterProvider({ children }: { children: React.ReactNode }) {
 
   const navigate = useCallback((to: string) => {
     if (typeof window === 'undefined') return;
+
+    // 1. Anti-double-click lock: Ignore clicks if transition is currently running
+    if (isTransitioningRef.current) {
+      return;
+    }
 
     if (to.startsWith('#')) {
       // Internal anchor
@@ -60,19 +80,25 @@ export function RouterProvider({ children }: { children: React.ReactNode }) {
     }
 
     // Direct path routing, e.g. '/about', '/blog', or '/'
+    const targetPath = to.split('#')[0] || '/';
+    const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+    const normalizedTarget = targetPath.replace(/\/$/, '') || '/';
+
+    // 2. Pre-navigation block: Ignore clicks on the current route without hash
+    if (currentPath === normalizedTarget && !to.includes('#')) {
+      return;
+    }
+
     if (window.location.pathname !== to) {
       window.history.pushState(null, '', to);
       setPathname(to);
       setHash('');
       window.dispatchEvent(new PopStateEvent('popstate'));
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, []);
 
   return (
-    <RouterContext.Provider value={{ pathname, hash, navigate }}>
+    <RouterContext.Provider value={{ pathname, hash, navigate, isTransitioning, setTransitioning }}>
       {children}
     </RouterContext.Provider>
   );
@@ -81,3 +107,44 @@ export function RouterProvider({ children }: { children: React.ReactNode }) {
 export function useRouter() {
   return useContext(RouterContext);
 }
+
+export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  to?: string;
+  href?: string;
+  children: React.ReactNode;
+}
+
+export function Link({ to, href, onClick, children, className, ...props }: LinkProps) {
+  const router = useRouter();
+  const target = to || href || '/';
+  const currentPath = router.pathname.replace(/\/$/, '') || '/';
+  const targetPath = target.split('#')[0].replace(/\/$/, '') || '/';
+  const isActive = currentPath === targetPath;
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onClick) onClick(e);
+    if (
+      !e.defaultPrevented &&
+      !target.startsWith('http') &&
+      !target.startsWith('mailto:') &&
+      !target.startsWith('tel:')
+    ) {
+      e.preventDefault();
+      router.navigate(target);
+    }
+  };
+
+  return (
+    <a
+      href={target}
+      onClick={handleClick}
+      aria-current={isActive ? 'page' : undefined}
+      data-active={isActive ? 'true' : 'false'}
+      className={className}
+      {...props}
+    >
+      {children}
+    </a>
+  );
+}
+

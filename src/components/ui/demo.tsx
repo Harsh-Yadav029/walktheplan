@@ -11,6 +11,7 @@ import { HowItWorks } from "@/components/ui/how-it-works";
 import { Pricing } from "@/components/blocks/pricing";
 import CompareUILib, { type ComparisonData } from "@/components/ui/shadcn-studio-compare-07";
 import { WorldMap } from "@/components/ui/world-map";
+import TailwindImageAccordion from "@/components/ui/tailwind-image-accordion";
 import { motion } from "framer-motion";
 
 export function WorldMapDemo() {
@@ -208,6 +209,14 @@ const SLIDES = [
       "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80",
   },
 ];
+
+export function TailwindImageAccordionDemo() {
+  return (
+    <div className="w-full py-10 bg-[#141516]">
+      <TailwindImageAccordion />
+    </div>
+  );
+}
 
 export function HoverSliderDemo() {
   return (

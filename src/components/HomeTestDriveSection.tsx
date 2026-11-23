@@ -26,6 +26,16 @@ export function HomeTestDriveSection({
     }
   };
 
+  // Ensure autoplay on mount
+  const handleVideoRef = (el: HTMLVideoElement | null) => {
+    videoRef.current = el;
+    if (el) {
+      el.defaultMuted = true;
+      el.muted = isMuted;
+      el.play().catch(() => {});
+    }
+  };
+
   return (
     <section
       id="test-drive"
@@ -41,31 +51,53 @@ export function HomeTestDriveSection({
           {/* Left Column: SaaS-Grade Architectural Copy & CTAs */}
           <div className="lg:col-span-7 flex flex-col items-start justify-center">
             {/* Script Kicker */}
-            <p className="font-calligraphy text-3xl sm:text-4xl text-[#EED77A] tracking-wide mb-2 select-none">
+            <p
+              data-motion-text="words"
+              className="font-calligraphy text-3xl sm:text-4xl text-[#EED77A] tracking-wide mb-2 select-none"
+            >
               The Blueprint Revolution
             </p>
 
             {/* National Capsule Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EED77A]/10 border border-[#EED77A]/30 text-xs font-mono uppercase tracking-widest text-[#EED77A] mb-5 shadow-sm">
+            <div
+              data-reveal="fade-up"
+              data-reveal-delay="0.05"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EED77A]/10 border border-[#EED77A]/30 text-xs font-mono uppercase tracking-widest text-[#EED77A] mb-5 shadow-sm"
+            >
               <Sparkles className="w-3.5 h-3.5 text-[#EED77A]" />
               <span>✦ INDIA'S 1:1 HOME EXPERIENCE</span>
             </div>
 
             {/* Editorial Heading */}
-            <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#F2EDE5] leading-[1.1] mb-5">
-              INDIA'S #1 HOME<br />
-              <span className="font-calligraphy text-5xl sm:text-6xl lg:text-7xl font-normal text-[#EED77A] inline-block mt-1">
-                Test Drive.
+            <h2
+              data-motion-text="lines"
+              className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#F2EDE5] leading-[1.1] mb-5"
+            >
+              <span className="motion-line-mask block overflow-hidden">
+                <span className="motion-line inline-block">INDIA'S #1 HOME</span>
+              </span>
+              <span className="motion-line-mask block overflow-hidden">
+                <span className="motion-line inline-block font-calligraphy text-5xl sm:text-6xl lg:text-7xl font-normal text-[#EED77A] mt-1">
+                  Test Drive.
+                </span>
               </span>
             </h2>
 
             {/* Subheading */}
-            <h3 className="text-xl sm:text-2xl font-serif font-medium text-white tracking-tight mb-4">
+            <h3
+              data-reveal="fade-up"
+              data-reveal-delay="0.1"
+              className="text-xl sm:text-2xl font-serif font-medium text-white tracking-tight mb-4"
+            >
               Don't Just Imagine Your Home. Walk Into It.
             </h3>
 
             {/* Narrative Paragraph */}
-            <p className="text-base sm:text-lg text-[#A5A7A4] font-light leading-relaxed max-w-xl mb-8">
+            <p
+              data-reveal="fade-up"
+              data-reveal-delay="0.18"
+              className="text-base sm:text-lg text-[#A5A7A4] font-light leading-relaxed max-w-xl mb-8"
+            >
               Your floor plan is more than lines on paper. At Walk The Plan, experience your future home at actual{' '}
               <strong className="text-white font-medium">1:1 scale</strong>. Explore every room, feel the proportions, discover design conflicts and make every decision with confidence — before construction begins.
             </p>
@@ -74,6 +106,8 @@ export function HomeTestDriveSection({
             <div className="flex flex-wrap items-center gap-4">
               <button
                 type="button"
+                data-magnetic="0.18"
+                data-cursor-label="Reserve"
                 onClick={onBookClick}
                 className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[#EED77A] to-[#D8BA58] hover:from-[#F5E296] hover:to-[#EED77A] text-[#191A18] font-bold px-7 py-3.5 rounded-xl font-mono text-xs uppercase tracking-wider transition-all duration-300 shadow-[0_0_30px_rgba(238,215,122,0.35)] hover:shadow-[0_0_40px_rgba(238,215,122,0.55)] cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
               >
@@ -83,6 +117,8 @@ export function HomeTestDriveSection({
 
               <button
                 type="button"
+                data-magnetic="0.18"
+                data-cursor-label="Explore"
                 onClick={() => {
                   if (onExploreGallery) {
                     onExploreGallery();
@@ -107,11 +143,14 @@ export function HomeTestDriveSection({
 
           {/* Right Column: 9:16 Vertical Video Reel Card */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <div className="relative aspect-[9/16] w-full max-w-[280px] sm:max-w-[320px] rounded-3xl overflow-hidden border border-white/15 bg-black/60 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] ring-1 ring-white/10 group">
+            <div
+              data-reveal="scale"
+              className="relative aspect-[9/16] w-full max-w-[280px] sm:max-w-[320px] rounded-3xl overflow-hidden border border-white/15 bg-black/60 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] ring-1 ring-white/10 group"
+            >
               
               {/* Native Video Player */}
               <video
-                ref={videoRef}
+                ref={handleVideoRef}
                 src="/videos/studio/file-1795272408152-290883819.mp4"
                 autoPlay
                 loop
